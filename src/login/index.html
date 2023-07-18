@@ -1,0 +1,56 @@
+<div
+    class="w-screen h-screen bg-gradient-to-t from-purple-900 to-zinc-800 flex items-center justify-center gap-6 flex-col"
+    >
+        <div
+            class="stats bg-primary text-primary-content flex justify-center items-center gap-4 p-2"
+        >
+            <div class="stat flex flex-col gap-0">
+                <div class="stat-title">Current counter</div>
+                <div
+                    class="stat-value flex justify-center items-center"
+                    id="counter-number"
+                >
+                    0
+                </div>
+                <div class="stat-actions flex justify-evenly items-center">
+                    <button class="btn btn-sm" onclick="add()">+</button>
+                    <button class="btn btn-sm" onclick="subtract()">
+                        -
+                    </button>
+                </div>
+            </div>
+            <!-- Note: htmx request's paths must follow your same backend response's paths (default: path from src to file) -->
+            <div hx-get="./login/user" class="btn btn-primary">Get</div>
+        </div>
+        <div>
+            <a href="../">
+                <p
+                    class="text-2xl font-bold cursor-pointer text-white hover:underline transition-all"
+                >
+                    Back to Homepage
+                </p>
+            </a>
+        </div>
+        <img src="/login_public/goWhite.svg" alt="" />
+    </div>
+</body>
+
+<!-- Custom js script tag -->
+<script>
+    // This is an example on how to handle js file
+    let counterNumber = document.getElementById("counter-number");
+    function add() {
+        let currentCounter = Number(counterNumber.innerHTML);
+
+        counterNumber.innerHTML = currentCounter + 1;
+    }
+    function subtract() {
+        let currentCounter = Number(counterNumber.innerHTML);
+
+        if (currentCounter == 0) {
+            return;
+        }
+
+        counterNumber.innerHTML = currentCounter - 1;
+    }
+</script>

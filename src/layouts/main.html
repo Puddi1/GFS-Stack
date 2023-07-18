@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link
+            rel="icon"
+            type="image/svg+xml"
+            href="/goWhite.svg"
+            media="(prefers-color-scheme: dark)"
+        />
+        <link
+            rel="icon"
+            type="image/svg+xml"
+            href="/goBlack.svg"
+            media="(prefers-color-scheme: light)"
+        />
+
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="GFS Stack" />
+        <meta
+            name="keywords"
+            content="GO, HTML, CSS, JavaScript, Tailwind, DaisyUI"
+        />
+        <meta name="author" content="Joe Mama" />
+
+        <title>{{.pageTitle}}</title>
+
+        <!-- Custom route to add tailwind and daisyUI styles -->
+        <link href="/~style/index.css" rel="stylesheet" />
+        <!-- Adding htmx -->
+        <script
+            src="https://unpkg.com/htmx.org@latest"
+            integrity="sha384-lVb3Rd/Ca0AxaoZg5sACe8FJKF0tnUgR2Kd7ehUOG5GCcROv5uBIZsOqovBAcWua"
+            crossorigin="anonymous"
+        ></script>
+    </head>
+    <body class="bg-black">
+        {{embed}}
+    </body>
+</html>
