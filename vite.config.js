@@ -38,6 +38,7 @@ export default defineConfig({
         alias: {
             // Here to create a custom path
             "/~style": resolve(__dirname, "./src"),
+            "/~script": resolve(__dirname, "./src"),
         },
     },
 });

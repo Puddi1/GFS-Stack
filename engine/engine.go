@@ -21,9 +21,9 @@ func Init_engine() *fiber.App {
 			PassLocalsToViews: true,
 		})
 
-		// Loading static files (css and js) on requests?
-		// app.Static("/~stile/", "./src", fiber.Static{})
-		// app.Static("./", "./src", fiber.Static{})
+		// Loading static files (css and js) on requests
+		app.Static("/~style/", "./src")
+		app.Static("/~script/", "./src")
 		// Loading static public files (images) on requests
 		app.Static("/", "./public")
 

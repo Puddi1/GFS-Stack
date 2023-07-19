@@ -20,7 +20,7 @@ func main() {
 	// Init env
 	env.Init_env()
 
-	if env.ENVs["ENVIRONMENT"] == "dev" {
+	if env.ENVs["DEVELOPMENT"] == "true" {
 		// Templates are based on the src directory and reload is managed by Fiber
 		fmt.Println("\nDevelopment Environment")
 	}

@@ -10,6 +10,7 @@ Built with:
 [DaisyUI](https://daisyui.com/)  
 [Supabase](https://supabase.com/)  
 [Stripe](https://stripe.com/)
+[entr(1)](https://eradman.com/entrproject/)
 
 ## Intro and Credits
 
@@ -58,10 +59,27 @@ Big credit to [Anthony](https://github.com/anthdm) for the philosophy.
     make
     ```
 
-    If you want to run it as development, thus DEVELOPMENT set to true
+    Note, by using the production environment you make Vite run `vite build`, that creates a static folder `./dist` with compressed assets and miscellania to improve both stability and performances. Then the GO server uses the static folder to render the HTML and related files. It doesn't refresh templates if you change them because they are meant to be used as static, in development it is the opposite.
+
+    If you want to run it as development, thus DEVELOPMENT set to true.
 
     ```bash
     make dev
+    ```
+
+    Note, by using the development environment you and the GO server will work directly in the `./src` folder, with no compressed files and with CDNs. HTML is rendered each time it is served by the GO server. To enhance usage I suggest to use the quick reload escape command for the browser.
+
+    Important: routes from devlopment to production don't change. If your build runs in development it will run even in production.  
+    You start development with fast and immediate frontend changes, a quick hot-reload for the GO backend that you don't have to monitor. Then you move in pre-production with a static frontend composed by Vite, where you can still make changes to the go infrastructure, still with hot-reload. In conclusion for production you have your GO server that uses static assets and if prefereed no hot-reload for the server.
+
+4. To change quickly environment:
+
+    <!-- to implement -->
+
+    Simply run
+
+    ```bash
+    make environment
     ```
 
 ## To Production
@@ -83,10 +101,12 @@ This is a list of pre-configured commands you can use:
 
 -   `make hotreload-run`  
     to use entr(1) to hot reload if any changes to the active production directories occours (all GO files and src directory, excluded: bin, dist, node_modules, .gitignore, README.md, go.sum).  
+    Note: this command requires [entr(1)](https://eradman.com/entrproject/) to be installed.  
     Shut down is being forced. How can you make it shut down gracefully? Make also it do it
 
 -   `make hotreload-dev`  
     Will use entr(1) to hot reload if any changes to the active development directories occours (all GO files, excluded: bin, dist, node_modules, .gitignore, README.md, go.sum and src).  
+    Note: this command requires [entr(1)](https://eradman.com/entrproject/) to be installed.  
     Shut down is being forced. How can you make it shut down gracefully? Make also it do it
 
 -   `make clean`  
