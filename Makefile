@@ -10,8 +10,12 @@ build:
 vite:
 	@npm run build
 
-hotreload:
+
+hotreload-run:
 	@ls * | entr -r make
+
+hotreload-dev:
+	@ls
 
 clean:
 	@go mod tidy

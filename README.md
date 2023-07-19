@@ -1,52 +1,96 @@
 # GFS Stack
 
-The quickest and simplest GO stack to bring you from idea to MVP ready for production.
+The quickest and simplest GO monolith stack to bring you from idea to MVP ready for production in days.
 
-Built with:
-Fiber - https://docs.gofiber.io/
-Vite
-HTMX
-Air Go
+Built with:  
+[Fiber](https://docs.gofiber.io/)  
+[Vite](https://vitejs.dev/)  
+[HTMX](https://htmx.org/)  
+[Tailwind](https://tailwindcss.com/)  
+[DaisyUI](https://daisyui.com/)  
+[Supabase](https://supabase.com/)  
+[Stripe](https://stripe.com/)
 
 ## Intro and Credits
 
 Thanks for checking out the stack and being interested. Feel free to open issues related to this repo and make adjustements to the stack with pull requests.
 
-Big credit to antony for introducting us to this stack.
+Big credit to [Anthony](https://github.com/anthdm) for the philosophy.
 
 ## To Start
 
-<!-- Requirements -->
+1. Clone the repository, which is a boilerplate repo to start all of your projects:
 
-entr1 v?
-node v?
-go v?
+    ```git
+    git clone https://github.com/Puddi1/GFS-Stack.git
+    ```
 
-git clone ecc myproject
-to clone the stack repo, a boilerplate repo to start all of your projects
+2. Run the initialization:
 
-touch .env
-echo "SUPABASE_KEY = "<yourkey>"" >> ./.env
-create an environment file to store all your secrets and add your supabase key, gitignored by default
+    ```bash
+    chmod +x init.sh
+    ./init.sh
+    ```
 
-npm install || yarn install
+    You'll be asked to insert your environment variables. Here's a quick overview:
+    Variables that are preceeded by `SUPABASE_` can all be found in your supabase's project [dashboard](https://supabase.com/dashboard)
 
-go mod init '<module name>'
-we init a new go module environment with a module name, which if you want it to be compatible with Dep and older versions that doesn't support go modules has to be declared as: github.com/<profile name>/<repo name> - https://www.youtube.com/watch?v=Z1VhG7cf83M
+    `SUPABASE_PROJECT_PASSWORD` is your supabase project's password string.  
+    `SUPABASE_API_PUBLIC_KEY` is the `anon_key` string.  
+    `SUPABASE_API_PRIVATE_KEY` is the `service_role` string.  
+    `SUPABASE_DB_HOST` is the full databse URL <https://yourProjectSubdomain.supabase.co>.  
+    `SUPABASE_DB_PORT` is the databse port.  
+    `SUPABASE_DB_NAME` is the databse name.  
+    `SUPABASE_DB_USER` is the databse user.  
+    `SUPABASE_DB_SSLMODE` is either disable string or verify-full string to enable it.  
+    `SUPABASE_DB_SSLCERT_PATH` if you insert `verify-full`on `SUPABASE_DB_SSLMODE` this is the path to the ssl certificate from the root of the project.
 
-make build
-to complie the app in go executable (binary)
+    `STRIPE_API_KEY` is the stripe API key string.
 
-make run
-to first build and then execute the binary
+    `PORT` is the port you wish the server listens to, skipping it will default to port 3000
+    `DEVELOPMENT` is if you want to run the build on development (Y) or production (N). You can change it after in the .env file: true for development, false for production
 
-ls | entr -r make
-to use entr(1) to hot reload if any changes to the used directories occours (all files and directories excluded: bin, dist, node_modules, .gitignore, README.md, go.sum). Shut down is being forced. How can you make it shut down gracefully?
+3. Run the server:
 
-# Useful Commands
+    If you want to run it as production, thus DEVELOPMENT set to false (make stands for the first make command: `make run`)
 
-make clean
-it will run go mod tidy, cleaning your go.mod setup based on packages usage.
+    ```bash
+    make
+    ```
+
+    If you want to run it as development, thus DEVELOPMENT set to true
+
+    ```bash
+    make dev
+    ```
+
+## To Production
+
+To deploy the stack to rpoduction
+
+## Useful Commands
+
+This is a list of pre-configured commands you can use:
+
+-   `make build`  
+    Will to complie the GO app in binary executable
+
+-   `make dev`  
+    Will first complie the GO app in binary and then execute it
+
+-   `make vite`  
+    Will make vite build the static frontend, same as running `npm run build` with build as `vite build --emptyOutDir`
+
+-   `make hotreload-run`  
+    to use entr(1) to hot reload if any changes to the active production directories occours (all GO files and src directory, excluded: bin, dist, node_modules, .gitignore, README.md, go.sum).  
+    Shut down is being forced. How can you make it shut down gracefully? Make also it do it
+
+-   `make hotreload-dev`  
+    Will use entr(1) to hot reload if any changes to the active development directories occours (all GO files, excluded: bin, dist, node_modules, .gitignore, README.md, go.sum and src).  
+    Shut down is being forced. How can you make it shut down gracefully? Make also it do it
+
+-   `make clean`  
+    Will run `go mod tidy`, cleaning your go.mod and go.sum setup based on packages usage.
 
 ## Stack Structure
 
@@ -94,14 +138,13 @@ htmx: minification eval error, evaluate
 
 5. entr1 graceful shutdown // hard
 6. supebase ssl // medium
-7. Bash init // ez
-8. backend related stuff // medium
-9. superbase mysequell // ez
-10. deployment // medium
-11. dns? // medium
-12. how to scale // ez
-13. Login with third party auth
-14. user token management clarify
+7. backend related stuff // medium
+8. superbase mysequell // ez
+9. deployment // medium
+10. dns? // medium
+11. how to scale // ez
+12. Login with third party auth
+13. user token management clarify
 
 <!-- github.com/stripe/stripe-go/v74 v74.25.0 // indirect
 github.com/sujit-baniya/flash v0.1.8 // indirect -->
@@ -112,3 +155,4 @@ pocketbase -> on stable version
 
 error: miscellania with eval
 error: Generated an empty chunk: "login/user".
+add note on how to deal also with go work
