@@ -1,30 +1,31 @@
-include .env
-export
-
+# # Development and Productions commands. # #
+# Production build is default command: make
 run: vite build
 	@./bin/server
 
 dev: build
 	@./bin/server
 
+
+# # Scripts commands # #
+init:
+	@chmod +x ./scripts/bash/init.sh
+	./scripts/bash/init.sh
 e:
+	@chmod +x ./scripts/bash/environment.sh
+	./scripts/bash/environment.sh
 
-# @bash -c 'if [[ \"$${DEVELOPMENT}\" == \"true\" ]]; then echo \"true\"; fi'
-# e to list envs
-# change: awk -F '=' '/^DEVELOPMENT/ { $2 = \"false\" } 1' .env > temp && mv temp .env
 
+# # Utils commands # #
 build:
 	@go build -o bin/server
 
 vite:
 	@npm run build
 
-# prob not necessary
-hotreload-run:
-	@ls * | entr -r make
-# reload only backend files
-hotreload-dev:
-	@ls
+hot:
+	@chmod +x ./scripts/bash/hotReloadGo.sh
+	./scripts/bash/hotReloadGo.sh
 
 clean:
 	@go mod tidy

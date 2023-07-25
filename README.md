@@ -29,8 +29,7 @@ Big credit to [Anthony](https://github.com/anthdm) for the philosophy.
 2. Run the initialization:
 
     ```bash
-    chmod +x init.sh
-    ./init.sh
+    make init
     ```
 
     You'll be asked to insert your environment variables. Here's a quick overview:
@@ -72,17 +71,30 @@ Big credit to [Anthony](https://github.com/anthdm) for the philosophy.
     Important: routes from devlopment to production don't change. If your build runs in development it will run even in production.  
     You start development with fast and immediate frontend changes, a quick hot-reload for the GO backend that you don't have to monitor. Then you move in pre-production with a static frontend composed by Vite, where you can still make changes to the go infrastructure, still with hot-reload. In conclusion for production you have your GO server that uses static assets and if prefereed no hot-reload for the server.
 
-4. To change quickly environment:
-
-    <!-- to implement -->
+4. To change quickly between production and development environment:
 
     Simply run
 
     ```bash
-    make environment
+    make e
     ```
 
+5. To run the build with hot reload
+
+    Simply run:
+
+    ```bash
+    make hot
+    ```
+
+    Remember that you'll need to have [entr(1)](https://eradman.com/entrproject/) to be installed to use this command.  
+    You can use it both interchangibly for development or if you have a last minute production change to hot reload when any backend or environment changes occur.  
+    To change files that are being watched you have to modify `./scripts/bash/hotReloadGo.sh`
+    <!-- Shut down is being forced. How can you make it shut down gracefully? Make also it do it -->
+
 ## To Production
+
+<!--  -->
 
 To deploy the stack to rpoduction
 
@@ -99,20 +111,12 @@ This is a list of pre-configured commands you can use:
 -   `make vite`  
     Will make vite build the static frontend, same as running `npm run build` with build as `vite build --emptyOutDir`
 
--   `make hotreload-run`  
-    to use entr(1) to hot reload if any changes to the active production directories occours (all GO files and src directory, excluded: bin, dist, node_modules, .gitignore, README.md, go.sum).  
-    Note: this command requires [entr(1)](https://eradman.com/entrproject/) to be installed.  
-    Shut down is being forced. How can you make it shut down gracefully? Make also it do it
-
--   `make hotreload-dev`  
-    Will use entr(1) to hot reload if any changes to the active development directories occours (all GO files, excluded: bin, dist, node_modules, .gitignore, README.md, go.sum and src).  
-    Note: this command requires [entr(1)](https://eradman.com/entrproject/) to be installed.  
-    Shut down is being forced. How can you make it shut down gracefully? Make also it do it
-
 -   `make clean`  
     Will run `go mod tidy`, cleaning your go.mod and go.sum setup based on packages usage.
 
 ## Stack Structure
+
+<!--  -->
 
 README.md is used as documents fot this stack.
 
@@ -141,6 +145,8 @@ scripts folder contains all single worker scripts you have to run locally on you
 utils folder contains all shared util functions.
 
 ## Basics - How to move around
+
+<!--  -->
 
 add cdn: <script src="https://unpkg.com/htmx.org@1.9.2" integrity="sha384-L6OqL9pRWyyFU3+/bjdSri+iIphTN/bvYyM37tICVyOJkWZLpP2vGn6VUEXgzg6h" crossorigin="anonymous"></script>
 to use htmx on html page
@@ -176,3 +182,7 @@ pocketbase -> on stable version
 error: miscellania with eval
 error: Generated an empty chunk: "login/user".
 add note on how to deal also with go work
+
+check chmod works for everyone or better solution
+
+check vite dont add CDNs to build,, try add htmx as static in production too

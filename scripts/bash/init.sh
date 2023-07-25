@@ -1,6 +1,7 @@
 #! /bin/bash
+# Script to initialize the project. Not super efficient but it gets the job done.
 
-# Not super efficient but it gets the job done.
+chmod +x init.sh
 
 # Variables to check and insert
 SUPABASE_PROJECT_PASSWORD=""
