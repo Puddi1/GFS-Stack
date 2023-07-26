@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/Puddi1/GFS-Stack/stripe_gfs"
 	"github.com/stripe/stripe-go/v74"
@@ -165,12 +166,22 @@ func HandleCheckoutSessionListLineItemsParamsAddFilter(
 }
 
 // // Customer Portal // //
-// func HandleCustomerPortalSessionCreation(id string) (*stripe.CheckoutSession, error) {
-// params := &stripe.BillingPortalSessionParams{
-// 	Customer:  stripe.String("cus_OKTgoI3cQYJLVV"),
-// 	ReturnURL: stripe.String("https://example.com/account"),
-// }
-// s, _ := session.New(params)
+// HandleCustomerPortalSessionCreation creates a new customer portal session.
+// Note: raw http request, stripe-go is giving me problems
+func HandleCustomerPortalSessionCreation(id string, returnURL string) (*stripe.CheckoutSession, error) {
 
-// return s, nil
-// }
+	t := "customer=cus_OKTgoI3cQYJLVV return_url=https://example.com/account"
+	body := []byte(t)
+	res, _ := HandleRequestHTTP(&RequestHTTP{
+		MethodHTTP: http.MethodPost,
+		Url:        "https://api.stripe.com/v1/billing_portal/sessions",
+		Body:       body,
+		Headers:    [][2]string{{"Authorization", "Bearer " + stripe.Key}},
+	})
+
+	fmt.Print(res)
+
+	var r *stripe.CheckoutSession
+
+	return r, nil
+}

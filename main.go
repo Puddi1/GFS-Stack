@@ -7,6 +7,7 @@ import (
 	"github.com/Puddi1/GFS-Stack/database"
 	"github.com/Puddi1/GFS-Stack/engine"
 	"github.com/Puddi1/GFS-Stack/env"
+	"github.com/Puddi1/GFS-Stack/handlers"
 	"github.com/Puddi1/GFS-Stack/stripe_gfs"
 )
 
@@ -56,6 +57,7 @@ func main() {
 	// _ = err
 
 	// fmt.Println(s)
+	handlers.HandleCustomerPortalSessionCreation("", "")
 
 	// Listen on PORT
 	engine.Listen(app)
