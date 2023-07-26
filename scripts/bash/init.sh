@@ -76,8 +76,10 @@ else
 fi
 
 
-read -r -p "STRIPE_API_KEY: " STRIPE_API_KEY
-printf "STRIPE_API_KEY=\"$STRIPE_API_KEY\"\n\n" >> ./.env
+read -r -p "STRIPE_API_PUBLIC_KEY: " STRIPE_API_PUBLIC_KEY
+printf "STRIPE_API_PUBLIC_KEY=\"$STRIPE_API_PUBLIC_KEY\"\n" >> ./.env
+read -r -p "STRIPE_API_PRIVATE_KEY: " STRIPE_API_PRIVATE_KEY
+printf "STRIPE_API_PRIVATE_KEY=\"$STRIPE_API_PRIVATE_KEY\"\n\n" >> ./.env
 
 
 portAnswer=true

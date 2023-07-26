@@ -7,7 +7,7 @@ import (
 	"github.com/Puddi1/GFS-Stack/database"
 	"github.com/Puddi1/GFS-Stack/engine"
 	"github.com/Puddi1/GFS-Stack/env"
-	"github.com/Puddi1/GFS-Stack/stripe"
+	"github.com/Puddi1/GFS-Stack/stripe_gfs"
 )
 
 // func gracefulShutdown() {
@@ -28,7 +28,7 @@ func main() {
 	// Init db
 	database.Init_db()
 	// Init stripe
-	stripe.Init_stripe()
+	stripe_gfs.Init_stripe()
 	// Init fiber
 	app := engine.Init_engine()
 	err := engine.SetRoutes(app)
@@ -42,6 +42,20 @@ func main() {
 	// database.DB.Create(&data.Subscription{Free: 3, Basic: 1342, Enterprise: 556})
 
 	// database.SignUpUserWithEmail("signup@user.com", "passordSuperSecure")
+
+	// s, err := handlers.HandleCheckoutSessionCreation(
+	// 	&stripe.CheckoutSessionParams{
+	// 		SuccessURL: stripe.String("https://pizza.com"),
+	// 		Mode:       stripe.String(stripe_gfs.PAYMENT),
+	// 		LineItems: []*stripe.CheckoutSessionLineItemParams{{
+	// 			Price:    stripe.String("price_1NXoBZHqfgifxJ03TMZLKskv"),
+	// 			Quantity: stripe.Int64(2),
+	// 		}},
+	// 	},
+	// )
+	// _ = err
+
+	// fmt.Println(s)
 
 	// Listen on PORT
 	engine.Listen(app)

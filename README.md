@@ -20,6 +20,14 @@ Big credit to [Anthony](https://github.com/anthdm) for the philosophy.
 
 ## To Start
 
+0. Have all external dependencies installed in you system:
+
+    - [entr(1)](https://eradman.com/entrproject/)
+      Download and install the package
+
+    - [Flyio](https://fly.io)
+      Follow the [installation](https://fly.io/docs/hands-on/install-flyctl/) instruction an [log in to Fly](https://fly.io/docs/getting-started/log-in-to-fly/)
+
 1. Clone the repository, which is a boilerplate repo to start all of your projects:
 
     ```git
@@ -94,25 +102,69 @@ Big credit to [Anthony](https://github.com/anthdm) for the philosophy.
 
 ## To Production
 
-<!--  -->
+To deploy the stack to poduction as smooth as possible you'll need to have [Flyio](https://fly.io) CLI installed, workflow:
 
-To deploy the stack to rpoduction
+0. If you aren't logged in, do so:
+
+    Login:
+
+    ```bash
+    fly auth login
+    ```
+
+    Signup:
+
+    ```bash
+    fly auth signup
+    ```
+
+1. Launch the app:
+
+    ```bash
+    flyctl launch
+    ```
+
+2. Deploy the app:
+
+    ```bash
+    flyctl deploy
+    ```
+
+Otherwise to deploy on your custom server, simply clone your repo, inititalize the project as production and run the app:
+
+1. Clone:
+
+    ```git
+    git clone https://github.com/<YourUsername/<RepositoryName>.git
+    ```
+
+2. Initialize:
+
+    ```bash
+    make init
+    ```
+
+3. Run:
+
+    ```bash
+    make
+    ```
 
 ## Useful Commands
 
 This is a list of pre-configured commands you can use:
 
 -   `make build`  
-    Will to complie the GO app in binary executable
+     Will to complie the GO app in binary executable
 
 -   `make dev`  
-    Will first complie the GO app in binary and then execute it
+     Will first complie the GO app in binary and then execute it
 
 -   `make vite`  
-    Will make vite build the static frontend, same as running `npm run build` with build as `vite build --emptyOutDir`
+     Will make vite build the static frontend, same as running `npm run build` with build as `vite build --emptyOutDir`
 
 -   `make clean`  
-    Will run `go mod tidy`, cleaning your go.mod and go.sum setup based on packages usage.
+     Will run `go mod tidy`, cleaning your go.mod and go.sum setup based on packages usage.
 
 ## Stack Structure
 
@@ -146,43 +198,56 @@ utils folder contains all shared util functions.
 
 ## Basics - How to move around
 
+Quick overview about features and how to leverage them
+
+-   Stripe
+    Stripe is the easies, fastest, and most reliable method of payment that the market can offer. The stack implements its [checkout session feature](https://stripe.com/docs/payments/checkout) as it is the quickest checkout workflow possible, while still having one of the highest conversions rates, offered by its brand familiarity and easiness of use.  
+    To modify the checkout page go to your [stripe checkout settings](https://dashboard.stripe.com/settings/checkout).  
+    Moreover, to help your users manage their profile and subscriptions we have impllemented the [stripe customer dashboard](https://stripe.com/docs/no-code/customer-portal).  
+    To modify the dashboard page go to your [stripe customer dashboard settings](https://dashboard.stripe.com/settings/billing/portal).
+
 <!--  -->
 
-add cdn: <script src="https://unpkg.com/htmx.org@1.9.2" integrity="sha384-L6OqL9pRWyyFU3+/bjdSri+iIphTN/bvYyM37tICVyOJkWZLpP2vGn6VUEXgzg6h" crossorigin="anonymous"></script>
-to use htmx on html page
-note: not good i production, how to solve?
+-   Fiber
+    Test
 
-note: using htmx with get request and response from backend with playin html, you'll be able to create a quick and simple app
+-   Supabase
+    Test
 
-note: js files must be type="module" to be build by vite
+-   HTMX
+    Remember that with htmx you'll also need to handle any request you make in the backend with a fiber route.
 
-note: custom routing added
+-   Vite
+    To make sure that vite takes all the additional js scripts imported in any of your html pages you'll need to be sure to pass the script tag with `type="module"`, otherwise it won't be passed to the production build
 
-htmx: simply import script on html
-htmx: htmx request's paths must follow your same backend response's paths
-htmx: minification eval error, evaluate
+## Todo
 
-5. entr1 graceful shutdown // hard
-6. supebase ssl // medium
-7. backend related stuff // medium
-8. superbase mysequell // ez
-9. deployment // medium
-10. dns? // medium
-11. how to scale // ez
-12. Login with third party auth
-13. user token management clarify
+Notes:
 
-<!-- github.com/stripe/stripe-go/v74 v74.25.0 // indirect
-github.com/sujit-baniya/flash v0.1.8 // indirect -->
+-   htmx
+    We use htmx CDN on html page not good i production, how to solve?  
+    Minification eval error, evaluate
 
-https://sujit-baniya.gitbook.io/fiber-boilerplate/additional-libraries
+-   Vite
+    check vite dont add CDNs to build,, try add htmx as static in production too
+    Error: empty chunk, what does it mean, is it affecting the build? If not, can you silenc it?
 
-pocketbase -> on stable version
+-   To check
+    https://sujit-baniya.gitbook.io/fiber-boilerplate/additional-libraries
 
-error: miscellania with eval
-error: Generated an empty chunk: "login/user".
-add note on how to deal also with go work
+Needed:
 
-check chmod works for everyone or better solution
+-   Graceful shutdown
+-   supebase ssl
+-   backend integration stuff
+-   superbase postgress utilities
+-   deployment flow test
+-   Login with third party auth
+-   user session token management utils
+-   add note on how to deal also with go work
+-   check chmod works for everyone or better solution
 
-check vite dont add CDNs to build,, try add htmx as static in production too
+Optionals:
+
+-   dns?
+-   how to scale?

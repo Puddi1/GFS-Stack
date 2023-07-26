@@ -7,7 +7,7 @@ then
 fi
 
 # Select all files without:
-# Folders: node_modules, dist, src, .git, public, scripts, test, bin, .DS_Store for macOS
+# Folders: node_modules, dist, src, .git, public, scripts, test, bin
 # Files: .gitignore, all .js root files, all .md root files, .gitignore, Makefile, package and package-lock .json, go .mod and .sum
 # to exclude a path add: -path PATH_FROM_ROOT -o \
 # to exclude a file add: ! -name "FILE_SCHEMA" \
@@ -19,7 +19,6 @@ find . -type d \(               \
     -path ./public -o           \
     -path ./test -o             \
     -path ./bin -o              \
-    -path ./.DS_Store -o        \
     -path ./scripts \)          \
     -prune -o                   \
     ! -name ".gitignore"        \
@@ -30,6 +29,4 @@ find . -type d \(               \
     ! -name "*.js"              \
     ! -name "go.mod"            \
     ! -name "go.sum"            \
-    -print
-# | entr -r "make dev"
-# -r to force run it -> solve
+    -print | entr -r make dev
