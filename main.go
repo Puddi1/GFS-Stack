@@ -57,7 +57,8 @@ func main() {
 	// _ = err
 
 	// fmt.Println(s)
-	handlers.HandleCustomerPortalSessionCreation("", "")
+	s, _ := handlers.HandleCustomerPortalSessionCreation("cus_OKTgoI3cQYJLVV", "https://youtube.com")
+	fmt.Print(s)
 
 	// Listen on PORT
 	engine.Listen(app)

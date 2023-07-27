@@ -2,11 +2,11 @@ package handlers
 
 import (
 	"fmt"
-	"net/http"
 
 	"github.com/Puddi1/GFS-Stack/stripe_gfs"
 	"github.com/stripe/stripe-go/v74"
-	"github.com/stripe/stripe-go/v74/checkout/session"
+	billingportalsession "github.com/stripe/stripe-go/v74/billingportal/session"
+	checkoutsession "github.com/stripe/stripe-go/v74/checkout/session"
 	"github.com/stripe/stripe-go/v74/customer"
 )
 
@@ -56,14 +56,14 @@ func HandleNewCustomer(params *stripe.CustomerParams) *stripe.Customer {
 
 // HandleCheckoutSessionCreation will create a new payment session
 func HandleCheckoutSessionCreation(params *stripe.CheckoutSessionParams) (*stripe.CheckoutSession, error) {
-	s, err := session.New(params)
+	s, err := checkoutsession.New(params)
 	HandleStripeError(err)
 	return s, nil
 }
 
 // HandleCheckoutSessionExpire will expire a session based on id
 func HandleCheckoutSessionExpire(id string, params *stripe.CheckoutSessionExpireParams) (*stripe.CheckoutSession, error) {
-	s, err := session.Expire(
+	s, err := checkoutsession.Expire(
 		id,
 		params,
 	)
@@ -73,7 +73,7 @@ func HandleCheckoutSessionExpire(id string, params *stripe.CheckoutSessionExpire
 
 // HandleGetCheckoutSession will get the checkout session based on id
 func HandleGetCheckoutSession(id string, params *stripe.CheckoutSessionParams) (*stripe.CheckoutSession, error) {
-	s, err := session.Get(
+	s, err := checkoutsession.Get(
 		id,
 		params,
 	)
@@ -85,26 +85,24 @@ func HandleGetCheckoutSession(id string, params *stripe.CheckoutSessionParams) (
 func HandleGetAllCheckoutSession(
 	params *stripe.CheckoutSessionListParams,
 	filters []stripe_gfs.FilterStruct,
-) (*session.Iter, error) {
-	paramsFiltered, err := HandleCheckoutSessionListParamsAddFilter(params, filters)
-	_ = err // temporary solution
+) *checkoutsession.Iter {
+	paramsFiltered := HandleCheckoutSessionListParamsAddFilter(params, filters)
 
-	i := session.List(paramsFiltered)
+	i := checkoutsession.List(paramsFiltered)
 
-	return i, nil
+	return i
 }
 
 // HandleGetAllCheckoutSessionLineItems gets all the checkout session ine items and return them
 func HandleGetAllCheckoutSessionLineItems(
 	params *stripe.CheckoutSessionListLineItemsParams,
 	filters []stripe_gfs.FilterStruct,
-) (*session.LineItemIter, error) {
-	paramsFiltered, err := HandleCheckoutSessionListLineItemsParamsAddFilter(params, filters)
-	_ = err // temporary solution
+) *checkoutsession.LineItemIter {
+	paramsFiltered := HandleCheckoutSessionListLineItemsParamsAddFilter(params, filters)
 
-	i := session.ListLineItems(paramsFiltered) // different from stripe api docs
+	i := checkoutsession.ListLineItems(paramsFiltered) // different from stripe api docs
 
-	return i, err
+	return i
 }
 
 // HandleCheckoutSessionParams will create a new checkout session params struct
@@ -138,7 +136,7 @@ func HandleCustomerAddExpand(
 func HandleCheckoutSessionListParamsAddFilter(
 	params *stripe.CheckoutSessionListParams,
 	filters []stripe_gfs.FilterStruct,
-) (*stripe.CheckoutSessionListParams, error) {
+) *stripe.CheckoutSessionListParams {
 	for e := range filters {
 		params.Filters.AddFilter(
 			filters[e].Key,
@@ -146,7 +144,7 @@ func HandleCheckoutSessionListParamsAddFilter(
 			filters[e].Value,
 		)
 	}
-	return params, nil
+	return params
 }
 
 // HandleCheckoutSessionListLineItemsParamsAddFilter handles all filters that you want
@@ -154,7 +152,7 @@ func HandleCheckoutSessionListParamsAddFilter(
 func HandleCheckoutSessionListLineItemsParamsAddFilter(
 	params *stripe.CheckoutSessionListLineItemsParams,
 	filters []stripe_gfs.FilterStruct,
-) (*stripe.CheckoutSessionListLineItemsParams, error) {
+) *stripe.CheckoutSessionListLineItemsParams {
 	for e := range filters {
 		params.Filters.AddFilter(
 			filters[e].Key,
@@ -162,26 +160,20 @@ func HandleCheckoutSessionListLineItemsParamsAddFilter(
 			filters[e].Value,
 		)
 	}
-	return params, nil
+	return params
 }
 
 // // Customer Portal // //
 // HandleCustomerPortalSessionCreation creates a new customer portal session.
 // Note: raw http request, stripe-go is giving me problems
-func HandleCustomerPortalSessionCreation(id string, returnURL string) (*stripe.CheckoutSession, error) {
+func HandleCustomerPortalSessionCreation(id string, returnURL string) (*stripe.BillingPortalSession, error) {
+	params := &stripe.BillingPortalSessionParams{
+		Customer:  stripe.String(id),
+		ReturnURL: stripe.String(returnURL),
+	}
+	s, err := billingportalsession.New(params)
 
-	t := "customer=cus_OKTgoI3cQYJLVV return_url=https://example.com/account"
-	body := []byte(t)
-	res, _ := HandleRequestHTTP(&RequestHTTP{
-		MethodHTTP: http.MethodPost,
-		Url:        "https://api.stripe.com/v1/billing_portal/sessions",
-		Body:       body,
-		Headers:    [][2]string{{"Authorization", "Bearer " + stripe.Key}},
-	})
+	HandleStripeError(err)
 
-	fmt.Print(res)
-
-	var r *stripe.CheckoutSession
-
-	return r, nil
+	return s, nil
 }
