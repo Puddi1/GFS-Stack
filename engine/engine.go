@@ -51,7 +51,9 @@ func Listen(app *fiber.App) {
 		}
 		return env.ENVs["PORT"]
 	}()
-	log.Fatal(app.Listen(":" + addr))
+	if err := app.Listen(":" + addr); err != nil {
+		log.Panic(err)
+	}
 }
 
 func init_engine() *html.Engine {

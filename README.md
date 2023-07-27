@@ -224,7 +224,18 @@ Quick overview about features and how to leverage them
 -   Vite
     To make sure that vite takes all the additional js scripts imported in any of your html pages you'll need to be sure to pass the script tag with `type="module"`, otherwise it won't be passed to the production build
 
-## Todo
+## Notes
+
+If running a multi-follder go environment, at the main root you will need to add a `go.mod` file with the go version and the path to handle these environments, example:
+
+```work
+go 1.20
+
+use (
+    ./environment1
+    ./environment2
+)
+```
 
 Notes:
 
@@ -241,16 +252,16 @@ Notes:
 
 Needed:
 
--   Graceful shutdown
 -   supebase ssl
 -   backend integration stuff
 -   superbase postgress utilities
--   deployment flow test
+-   check Fiber middelwares
 -   Login with third party auth
 -   user session token management utils
--   add note on how to deal also with go work
 -   check chmod works for everyone or better solution
 -   stripe webhooks, idempotency and verify signature
+-   deployment flow test
+-   Integrate [netadata](https://www.netdata.cloud/)
 
 Optionals:
 
