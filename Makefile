@@ -30,5 +30,8 @@ hot:
 	@chmod +x ./scripts/bash/hotReloadGo.sh
 	@./scripts/bash/hotReloadGo.sh
 
+s-wh:
+	@echo "lol"
+
 clean:
 	@go mod tidy

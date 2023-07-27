@@ -9,7 +9,7 @@ Built with:
 [Tailwind](https://tailwindcss.com/)  
 [DaisyUI](https://daisyui.com/)  
 [Supabase](https://supabase.com/)  
-[Stripe](https://stripe.com/)
+[Stripe](https://stripe.com/)  
 [entr(1)](https://eradman.com/entrproject/)
 
 ## Intro and Credits
@@ -204,7 +204,11 @@ Quick overview about features and how to leverage them
     Stripe is the easies, fastest, and most reliable method of payment that the market can offer. The stack implements its [checkout session feature](https://stripe.com/docs/payments/checkout) as it is the quickest checkout workflow possible, while still having one of the highest conversions rates, offered by its brand familiarity and easiness of use.  
     To modify the checkout page go to your [stripe checkout settings](https://dashboard.stripe.com/settings/checkout).  
     Moreover, to help your users manage their profile and subscriptions we have impllemented the [stripe customer dashboard](https://stripe.com/docs/no-code/customer-portal).  
-    To modify the dashboard page go to your [stripe customer dashboard settings](https://dashboard.stripe.com/settings/billing/portal).
+    To modify the dashboard page go to your [stripe customer dashboard settings](https://dashboard.stripe.com/settings/billing/portal).  
+    Any creation or modification of any of your stripe products is done programattically. That's because to create an MVP where speed matters doing it by hand can be fatser.  
+    Our stripe implementation regarding [products and relative subcategories](https://stripe.com/docs/api/products?lang=go) will give you the possibility to fetch infos so that you can update the UI programmatically, search, update, create and delete Products, Prices, Coupons, Promotion codes and Discounts.  
+    [Webhooks](https://stripe.com/docs/webhooks) are essential to coordinate movements between your app and the stripe balance. You can check all [events](https://stripe.com/docs/api/events/types) that can be triggered and choose to which one subscribe with our [webhooks API implementation](https://stripe.com/docs/api/webhook_endpoints).  
+    If you wish to add features you are completely free to do so.
 
 <!--  -->
 
@@ -246,6 +250,7 @@ Needed:
 -   user session token management utils
 -   add note on how to deal also with go work
 -   check chmod works for everyone or better solution
+-   stripe webhooks, idempotency and verify signature
 
 Optionals:
 

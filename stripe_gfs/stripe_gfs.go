@@ -18,6 +18,11 @@ type FilterStruct struct {
 	Value string `json:"value"`
 }
 
+type MetadataStruct struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
 var SC *client.API
 
 func Init_stripe() {
