@@ -2,5 +2,5 @@
 
 let button = document.getElementById("button");
 button.addEventListener("click", () => {
-    window.location.href = "/login";
+    window.location.href = "/signup";
 });

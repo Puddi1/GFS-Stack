@@ -262,6 +262,7 @@ Needed:
 -   stripe webhooks, idempotency and verify signature
 -   deployment flow test
 -   Integrate [netadata](https://www.netdata.cloud/)
+-   404 page
 
 Optionals:
 

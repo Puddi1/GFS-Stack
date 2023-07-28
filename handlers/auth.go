@@ -69,7 +69,7 @@ func HandleSignUpUserWithEmail(email string, password string) error {
 }
 
 // HandleLoginUserWithEmail allows you to login users with email and password via supabase Auth
-func HandleLoginUserWithEmail(email string, password string) error {
+func HandleLoginUserWithEmail(email string, password string) (*http.Response, error) {
 	apiKey := env.ENVs["SUPABASE_API_PRIVATE_KEY"]
 	url := env.ENVs["SUPABASE_URL"] + "/auth/v1/token?grant_type=password"
 	body := map[string]string{"email": email, "password": password}
@@ -88,8 +88,9 @@ func HandleLoginUserWithEmail(email string, password string) error {
 	resBody := HandleResponseBodyToString(res)
 
 	fmt.Printf("\nUser logged in, response: %s", resBody)
+	fmt.Println(res)
 
-	return nil
+	return res, nil
 }
 
 // HandleLoginUserWithPhone allows you to login users with phone and password via supabase Auth

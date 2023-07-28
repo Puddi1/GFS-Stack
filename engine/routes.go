@@ -2,7 +2,9 @@ package engine
 
 import (
 	"fmt"
+	"time"
 
+	"github.com/Puddi1/GFS-Stack/env"
 	"github.com/Puddi1/GFS-Stack/handlers"
 	"github.com/gofiber/fiber/v2"
 )
@@ -16,8 +18,6 @@ func SetRoutes(app *fiber.App) error {
 
 	// // HTML Requests // //
 	htmlRequest(app)
-	// // HTMX Requests // //
-	htmxRequest(app)
 	// // API Requests // //
 	apiRequest(api)
 	// // DATABASE Requests // //
@@ -39,23 +39,67 @@ func htmlRequest(r fiber.Router) {
 			"stringFromBackend": "Ready to ship!",
 		}, "layouts/main")
 	})
-	// login
-	r.Get("/login", func(c *fiber.Ctx) error {
-		return c.Render("login/index", fiber.Map{}, "layouts/main")
+	// signin
+	r.Get("/signin", func(c *fiber.Ctx) error {
+		return c.Render("signin/index", fiber.Map{
+			"pageTitle": "GFS - Signin",
+		}, "layouts/main")
 	})
-}
-
-func htmxRequest(r fiber.Router) {
-	// login/user
-	r.Get("/login/user", func(c *fiber.Ctx) error {
-		return c.Render("login/user", fiber.Map{})
+	// signup
+	r.Get("/signup", func(c *fiber.Ctx) error {
+		return c.Render("signup/index", fiber.Map{
+			"pageTitle": "GFS - Signup",
+		}, "layouts/main")
 	})
 }
 
 func apiRequest(r fiber.Router) {
-	r.Get("/login/redirect", func(c *fiber.Ctx) error {
-		location, status := handlers.HandleLoginWithThirdPartyOAuth(handlers.GOOGLE, "")
-		return c.Redirect(location, status)
+	r.Get("/signup/OAuth/:provider", func(c *fiber.Ctx) error {
+		switch c.Params("provider") {
+		case "google":
+			redirectUrl := "" + env.ENVs["APP_URL"] + "/dashboard"
+			location, status := handlers.HandleLoginWithThirdPartyOAuth(handlers.GOOGLE, redirectUrl)
+			return c.Redirect(location, status)
+		default:
+			return nil
+		}
+	})
+	r.Get("/signin/OAuth/:provider", func(c *fiber.Ctx) error {
+		switch c.Params("provider") {
+		case "google":
+			redirectUrl := "" + env.ENVs["APP_URL"] + "/dashboard"
+			location, status := handlers.HandleLoginWithThirdPartyOAuth(handlers.GOOGLE, redirectUrl)
+			return c.Redirect(location, status)
+		default:
+			return nil
+		}
+	})
+	r.Post("/signup/email", func(c *fiber.Ctx) error {
+		b := new(handlers.UpdateUserBody)
+		if err := c.BodyParser(b); err != nil {
+			return err
+		}
+		err := handlers.HandleSignUpUserWithEmail(b.Email, b.Password)
+		if err != nil {
+			fmt.Printf("during user signup: %e", err)
+		}
+
+		time.Sleep(5 * time.Second)
+		return nil
+	})
+	r.Post("/signin/email", func(c *fiber.Ctx) error {
+		b := new(handlers.UpdateUserBody)
+		if err := c.BodyParser(b); err != nil {
+			return err
+		}
+		res, err := handlers.HandleLoginUserWithEmail(b.Email, b.Password)
+		_ = res
+		if err != nil {
+			fmt.Printf("during user signin: %e", err)
+		}
+
+		time.Sleep(5 * time.Second)
+		return nil
 	})
 }
 
