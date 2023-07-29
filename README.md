@@ -250,6 +250,8 @@ Notes:
 -   To check
     https://sujit-baniya.gitbook.io/fiber-boilerplate/additional-libraries
 
+-   LLogger, has follder logs the need to be init?
+
 Needed:
 
 -   supebase ssl
@@ -263,6 +265,9 @@ Needed:
 -   deployment flow test
 -   Integrate [netadata](https://www.netdata.cloud/)
 -   404 page
+-   Add popup error / success frontend
+-   add logger, that logs with context and logges any event on a file, refresh each run?
+-   Implement DIP and Middleware patterns to enhance code stability and dinamicity.
 
 Optionals:
 

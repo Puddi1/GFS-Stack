@@ -1,8 +1,6 @@
 #! /bin/bash
 # Script to initialize the project. Not super efficient but it gets the job done.
 
-chmod +x init.sh
-
 # Variables to check and insert
 SUPABASE_PROJECT_PASSWORD=""
 SUPABASE_URL=""
@@ -19,6 +17,7 @@ STRIPE_API_KEY=""
 
 PORT="" # "" := 3000
 DEVELOPMENT=""
+APP_URL="" # development := localhost
 
 # Create the .env file if not present
 if [ -f ./.env ]
@@ -119,6 +118,15 @@ while $developmentAnswer; do
     esac
 done
 printf "DEVELOPMENT=\"$DEVELOPMENT\"\n" >> ./.env
+
+if [ "$DEVELOPMENT" == "true" ]
+then
+    read -r -p "APP_URL: " APP_URL
+    printf "APP_URL=\"$APP_URL\"\n" >> ./.env
+    echo -e "\n"
+else
+    printf "APP_URL=\"localhost:$PORT\"\n" >> ./.env
+fi
 
 echo -e "\n"
 echo "Installing node packages"

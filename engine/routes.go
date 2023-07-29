@@ -2,6 +2,7 @@ package engine
 
 import (
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/Puddi1/GFS-Stack/env"
@@ -30,6 +31,7 @@ func SetRoutes(app *fiber.App) error {
 	return nil
 }
 
+// All GET request that have to return a Hypertext response
 func htmlRequest(r fiber.Router) {
 	// index
 	r.Get("/", func(c *fiber.Ctx) error {
@@ -53,6 +55,7 @@ func htmlRequest(r fiber.Router) {
 	})
 }
 
+// All requests to the API
 func apiRequest(r fiber.Router) {
 	r.Get("/signup/OAuth/:provider", func(c *fiber.Ctx) error {
 		switch c.Params("provider") {
@@ -103,13 +106,15 @@ func apiRequest(r fiber.Router) {
 	})
 }
 
+// All direct requests to the database backend side, needed?
 func databaseRequest(r fiber.Router) {
-	r.Get("/", func(c *fiber.Ctx) error {
+	r.Get("/", onlyAdmin(func(c *fiber.Ctx) error {
 		// handle db
 		return nil
-	})
+	}))
 }
 
+// All requests to stripe backend side
 func stripeRequest(r fiber.Router) {
 	r.Post("/user/create", func(c *fiber.Ctx) error {
 		// Create user
@@ -117,6 +122,7 @@ func stripeRequest(r fiber.Router) {
 	})
 }
 
+// All requests sent by stripe webhook
 func stripeWebhooks(r fiber.Router) {
 	// All webhook requests are handled by a signle endpoint for simplicity
 	// cases not handled will return a 503 status error and a json custom message
@@ -143,4 +149,19 @@ func stripeWebhooks(r fiber.Router) {
 			return fiber.NewError(fiber.StatusServiceUnavailable, `{"message": "Stripe webhook not supported"}`)
 		}
 	})
+}
+
+// Routes filters
+func onlyAdmin(fn fiber.Handler) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		// Gatekeeping logic
+		fmt.Print("Gatekeeping checks")
+		a := false
+		if a {
+			return c.SendStatus(http.StatusUnauthorized)
+		}
+
+		// Passed the gatekeeper
+		return fn(c)
+	}
 }
