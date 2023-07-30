@@ -1,6 +1,6 @@
 # GFS Stack
 
-The quickest and simplest GO monolith stack to bring you from idea to MVP ready for production in days.
+The quickest and simplest GO stack to bring you from idea to MVP ready for production in days.
 
 Built with:  
 [Fiber](https://docs.gofiber.io/)  
