@@ -224,6 +224,9 @@ Quick overview about features and how to leverage them
 -   Vite
     To make sure that vite takes all the additional js scripts imported in any of your html pages you'll need to be sure to pass the script tag with `type="module"`, otherwise it won't be passed to the production build
 
+-   Logger
+    tt
+
 ## Notes
 
 If running a multi-follder go environment, at the main root you will need to add a `go.mod` file with the go version and the path to handle these environments, example:

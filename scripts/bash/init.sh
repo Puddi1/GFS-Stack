@@ -19,6 +19,8 @@ PORT="" # "" := 3000
 DEVELOPMENT=""
 APP_URL="" # development := localhost
 
+LOG_FILE_PATH="./logs/logs.log"
+
 # Create the .env file if not present
 if [ -f ./.env ]
 then
@@ -122,11 +124,13 @@ printf "DEVELOPMENT=\"$DEVELOPMENT\"\n" >> ./.env
 if [ "$DEVELOPMENT" == "true" ]
 then
     read -r -p "APP_URL: " APP_URL
-    printf "APP_URL=\"$APP_URL\"\n" >> ./.env
+    printf "APP_URL=\"$APP_URL\"\n\n" >> ./.env
     echo -e "\n"
 else
-    printf "APP_URL=\"localhost:$PORT\"\n" >> ./.env
+    printf "APP_URL=\"localhost:$PORT\"\n\n" >> ./.env
 fi
+
+printf "LOG_FILE_PATH=\"$LOG_FILE_PATH\"\n" >> ./.env
 
 echo -e "\n"
 echo "Installing node packages"
