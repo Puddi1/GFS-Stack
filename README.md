@@ -210,7 +210,7 @@ Quick overview about features and how to leverage them
     [Webhooks](https://stripe.com/docs/webhooks) are essential to coordinate movements between your app and the stripe balance. You can check all [events](https://stripe.com/docs/api/events/types) that can be triggered and choose to which one subscribe with our [webhooks API implementation](https://stripe.com/docs/api/webhook_endpoints).  
     If you wish to add features you are completely free to do so.
 
-<!--  -->
+<!-- down -->
 
 -   Fiber
     Test
@@ -224,8 +224,12 @@ Quick overview about features and how to leverage them
 -   Vite
     To make sure that vite takes all the additional js scripts imported in any of your html pages you'll need to be sure to pass the script tag with `type="module"`, otherwise it won't be passed to the production build
 
+<!-- up -->
+
 -   Logger
-    tt
+    Logger is added to log events in a structured manner and to keep a trace of everything in a log file inside the logs folder.  
+    You can use the standard log, a slog custom variaton or the initialized LoggerGFS.  
+    Note that you can still modify the LoggerGFS via functions of type `HandlerOptionsFunc` passed in the Init_LoggerGFS.
 
 ## Notes
 
@@ -267,9 +271,8 @@ Needed:
 -   stripe webhooks, idempotency and verify signature
 -   deployment flow test
 -   Integrate [netadata](https://www.netdata.cloud/)
--   404 page
+-   404, 500 (forbidden) page
 -   Add popup error / success frontend
--   add logger, that logs with context and logges any event on a file, refresh each run?
 -   Implement DIP and Middleware patterns to enhance code stability and dinamicity.
 
 Optionals:

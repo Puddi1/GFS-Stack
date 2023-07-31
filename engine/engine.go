@@ -1,12 +1,18 @@
 package engine
 
 import (
+	"errors"
+	"fmt"
 	"log"
 
 	"github.com/Puddi1/GFS-Stack/env"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
 )
+
+type ErrorSpecifications struct {
+	// ecc to create custom err messages on the fly
+}
 
 // Init_engine creates the app, the view engine and adds static files.
 // Note: for dev environments the app works around the source folder, while
@@ -18,6 +24,7 @@ func Init_engine() *fiber.App {
 		app := fiber.New(fiber.Config{
 			Views:             init_engine(),
 			PassLocalsToViews: true,
+			ErrorHandler:      handleErrors(),
 		})
 
 		// Loading static files (css and js) on requests
@@ -33,6 +40,7 @@ func Init_engine() *fiber.App {
 	app := fiber.New(fiber.Config{
 		Views:             init_engine(),
 		PassLocalsToViews: true,
+		ErrorHandler:      handleErrors(),
 	})
 
 	// Loading static files (css and js) on requests
@@ -56,6 +64,7 @@ func Listen(app *fiber.App) {
 	}
 }
 
+// Initialize the correct engine
 func init_engine() *html.Engine {
 	if env.ENVs["DEVELOPMENT"] == "true" {
 		// Reload fiber templlates
@@ -66,4 +75,39 @@ func init_engine() *html.Engine {
 	// Static dist files
 	engine := html.New("./dist", ".html")
 	return engine
+}
+
+// handle Fiber Errors
+func handleErrors() func(*fiber.Ctx, error) error {
+	return func(c *fiber.Ctx, err error) error {
+		// Status code defaults to 500
+		code := fiber.StatusInternalServerError
+		// Retrieve the custom status code if it's a *fiber.Error
+		var e *fiber.Error
+		if errors.As(err, &e) {
+			code = e.Code
+		}
+
+		// Custom error actions
+		switch code {
+		case 403:
+			log.Println("Error 403 triggered")
+		case 404:
+			log.Println("Error 404 triggered")
+		}
+
+		// Render error page
+		log.Println("Rendering page")
+		name := fmt.Sprintf("errors/%d", code)
+		pageTitle := fmt.Sprintf("GFS Stack - %d error", code)
+		errRender := c.Render(name, fiber.Map{
+			"pageTitle": pageTitle,
+		}, "layouts/main")
+
+		if errRender != nil {
+			// handle error
+		}
+
+		return nil
+	}
 }

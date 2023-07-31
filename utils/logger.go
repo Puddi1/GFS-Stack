@@ -9,7 +9,7 @@ import (
 )
 
 // Init_LoggerGFS will handle the initialization of the logger and set it as the default
-func Init_LoggerGFS(logFilePath string, handlerOpts ...HandlerOptionsFunc) error {
+func Init_LoggerGFS(logFilePath string, writeLogs string, handlerOpts ...HandlerOptionsFunc) error {
 	wr := NewWriterGFS(logFilePath)
 	err := NewDefaultLogger(wr, handlerOpts...)
 	if err != nil {
@@ -20,7 +20,8 @@ func Init_LoggerGFS(logFilePath string, handlerOpts ...HandlerOptionsFunc) error
 
 // LoggerGFS is a custom GFS logger
 type WriterGFS struct {
-	filePath string
+	filePath  string
+	writeLogs string
 }
 
 // NewWriterGFS returns a newly initialized WriterGFS struct pointers
@@ -40,6 +41,10 @@ func (l WriterGFS) Write(b []byte) (n int, err error) {
 	}
 
 	// Then writes down to the log file
+	if l.writeLogs != "true" {
+		return n, nil
+	}
+
 	logFile, err := os.OpenFile(l.filePath, os.O_APPEND|os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
 		return 0, err

@@ -2,7 +2,7 @@ package engine
 
 import (
 	"fmt"
-	"net/http"
+	"log"
 	"time"
 
 	"github.com/Puddi1/GFS-Stack/env"
@@ -53,6 +53,7 @@ func htmlRequest(r fiber.Router) {
 			"pageTitle": "GFS - Signup",
 		}, "layouts/main")
 	})
+	r.Get("/admin", onlyAdmin(func(c *fiber.Ctx) error { return nil }))
 }
 
 // All requests to the API
@@ -158,7 +159,17 @@ func onlyAdmin(fn fiber.Handler) fiber.Handler {
 		fmt.Print("Gatekeeping checks")
 		a := false
 		if a {
-			return c.SendStatus(http.StatusUnauthorized)
+			return c.Render("errors/403", fiber.Map{
+				"titlePage": "GFS Stack - 403 Forbidden",
+				"status":    "403 Forbidden",
+				"message":   "You are not allowed",
+			}, "layouts/main")
+		}
+
+		// 404 error
+		if !a {
+			log.Println(fiber.ErrForbidden)
+			return fiber.ErrForbidden
 		}
 
 		// Passed the gatekeeper

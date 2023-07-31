@@ -53,7 +53,7 @@ func main() {
 		log.Println("Development Environment")
 	}
 	// Init Logger
-	errLog := utils.Init_LoggerGFS(env.ENVs["LOG_FILE_PATH"])
+	errLog := utils.Init_LoggerGFS(env.ENVs["LOG_FILE_PATH"], env.ENVs["WRITE_LOGS"])
 	if errLog != nil {
 		log.Panicf("Logger not initialized correctly: %e", errLog)
 	}
