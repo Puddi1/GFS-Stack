@@ -10,10 +10,6 @@ import (
 	"github.com/gofiber/template/html/v2"
 )
 
-type ErrorSpecifications struct {
-	// ecc to create custom err messages on the fly
-}
-
 // Init_engine creates the app, the view engine and adds static files.
 // Note: for dev environments the app works around the source folder, while
 // for production environments it uses the vite built for performances
@@ -78,7 +74,11 @@ func init_engine() *html.Engine {
 }
 
 // handle Fiber Errors
-func handleErrors() func(*fiber.Ctx, error) error {
+// Possible to improve? Ex: Handling custom messages from routes errors, idea:
+// Add struct with sync group and message, signle page html, start ground of only
+// one request on start of error and clear if at the end, can be do even w/ mutex.
+// Question: is it performant enough? fairly possible
+func handleErrors(msg ...string) func(*fiber.Ctx, error) error {
 	return func(c *fiber.Ctx, err error) error {
 		// Status code defaults to 500
 		code := fiber.StatusInternalServerError
@@ -105,7 +105,7 @@ func handleErrors() func(*fiber.Ctx, error) error {
 		}, "layouts/main")
 
 		if errRender != nil {
-			// handle error
+			return c.Status(fiber.StatusNotImplemented).SendString("Error not supported")
 		}
 
 		return nil

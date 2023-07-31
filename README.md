@@ -257,8 +257,6 @@ Notes:
 -   To check
     https://sujit-baniya.gitbook.io/fiber-boilerplate/additional-libraries
 
--   LLogger, has follder logs the need to be init?
-
 Needed:
 
 -   supebase ssl
@@ -270,8 +268,7 @@ Needed:
 -   check chmod works for everyone or better solution
 -   stripe webhooks, idempotency and verify signature
 -   deployment flow test
--   Integrate [netadata](https://www.netdata.cloud/)
--   404, 500 (forbidden) page
+-   Integrate [prometeus](https://prometheus.io/docs/introduction/first_steps/)
 -   Add popup error / success frontend
 -   Implement DIP and Middleware patterns to enhance code stability and dinamicity.
 

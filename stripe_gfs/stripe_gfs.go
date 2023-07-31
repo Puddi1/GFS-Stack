@@ -7,9 +7,9 @@ import (
 )
 
 const (
-	PAYMENT      = "payment"
-	SETUP        = "setup"
-	SUBSCRIPTION = "subscription"
+	Payment      = "payment"
+	Setup        = "setup"
+	Subscription = "subscription"
 )
 
 type FilterStruct struct {

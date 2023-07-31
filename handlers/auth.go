@@ -24,25 +24,25 @@ type UpdateUserData struct {
 }
 
 // OAuth providers
-const (
-	APPLE     = "apple"
-	AZURE     = "azure"
-	BITBUCKET = "bitbucket"
-	DISCORD   = "discord"
-	FACEBOOK  = "facebook"
-	FIGMA     = "figma"
-	GITHUB    = "github"
-	GITLAB    = "gitlab"
-	GOOGLE    = "google"
-	KEYCLOAK  = "keycloak"
-	LINKEDIN  = "linkedin"
-	NOTION    = "notion"
-	SLACK     = "slack"
-	SPOTIFY   = "spotify"
-	TWITCH    = "twitch"
-	TWITTER   = "twitter"
-	WORKOS    = "workos"
-)
+var OAuth = map[string]string{
+	"Apple":     "apple",
+	"Azure":     "azure",
+	"Bitbucket": "bitbucket",
+	"Discord":   "discord",
+	"Facebook":  "facebook",
+	"Figma":     "figma",
+	"Github":    "github",
+	"Gitlab":    "gitlab",
+	"Google":    "google",
+	"Kexcloak":  "keycloak",
+	"Linkedin":  "linkedin",
+	"Notion":    "notion",
+	"Slack":     "slack",
+	"Spotify":   "spotify",
+	"Twitch":    "twitch",
+	"Twitter":   "twitter",
+	"Workos":    "workos",
+}
 
 // HandleSignUpUserWithEmail allows you to sign up users with email and password via supabase Auth
 func HandleSignUpUserWithEmail(email string, password string) error {
