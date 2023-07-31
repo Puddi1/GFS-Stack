@@ -12,6 +12,9 @@ func onlyAdmin(fn fiber.Handler) fiber.Handler {
 		// Gatekeeping logic
 		fmt.Print("Gatekeeping checks")
 		if true {
+			errInfHandler.sw.Wait()
+			errInfHandler.sw.Add(1)
+			errInfHandler.errorComment = "This is an only-Admin page"
 			return fiber.ErrForbidden
 		}
 

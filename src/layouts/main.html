@@ -25,13 +25,14 @@
 
         <title>{{.pageTitle}}</title>
 
-        <!-- CDN to use packages in development, to be ignored in production -->
+        <!-- CDN to use packages in development and hot reload of the page (seconds), to be ignored in production -->
         <link
             href="https://cdn.jsdelivr.net/npm/daisyui@3.2.1/dist/full.css"
             rel="stylesheet"
             type="text/css"
         />
         <script src="https://cdn.tailwindcss.com"></script>
+        <meta http-equiv="refresh" content="5" />
 
         <!-- Custom route to add tailwind and daisyUI styles in production -->
         <link href="/~style/index.css" rel="stylesheet" />
@@ -42,21 +43,6 @@
             integrity="sha384-zUfuhFKKZCbHTY6aRR46gxiqszMk5tcHjsVFxnUo8VMus4kHGVdIYVbOYYNlKmHV"
             crossorigin="anonymous"
         ></script>
-        <script type="module">
-            function logURL(requestDetails) {
-                console.log(`Loading: ${requestDetails.url}`);
-            }
-
-            console.log(chrome);
-            console.log(chrome.webRequest);
-
-            chrome.webRequest.onCompleted.addListener(logURL, {
-                urls: ["<all_urls>"],
-            });
-            chrome.webRequest.onBeforeRequest.addListener(logURL, {
-                urls: ["<all_urls>"],
-            });
-        </script>
     </head>
     <body class="bg-black">
         {{embed}}

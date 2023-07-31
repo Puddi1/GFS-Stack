@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"sync"
 
 	"github.com/Puddi1/GFS-Stack/env"
 	"github.com/gofiber/fiber/v2"
@@ -15,6 +16,9 @@ import (
 // for production environments it uses the vite built for performances
 // and stability.
 func Init_engine() *fiber.App {
+	// Errors infos handler
+	errInfHandler = new(ErrorHandler)
+
 	if env.ENVs["DEVELOPMENT"] == "true" {
 		// Init Fiber engine and app
 		app := fiber.New(fiber.Config{
@@ -73,13 +77,21 @@ func init_engine() *html.Engine {
 	return engine
 }
 
+// Type to be used to comunicate between error redirection and handling
+// Add values as much as you want
+type ErrorHandler struct {
+	sw           sync.WaitGroup
+	errorComment string
+}
+
+// Variable to be used to comunicate error infos
+var errInfHandler *ErrorHandler
+
 // handle Fiber Errors
-// Possible to improve? Ex: Handling custom messages from routes errors, idea:
-// Add struct with sync group and message, signle page html, start ground of only
-// one request on start of error and clear if at the end, can be do even w/ mutex.
-// Question: is it performant enough? fairly possible
-func handleErrors(msg ...string) func(*fiber.Ctx, error) error {
+// Performance because of waitgroup? Shouldn't be affected much
+func handleErrors() func(*fiber.Ctx, error) error {
 	return func(c *fiber.Ctx, err error) error {
+		defer errInfHandler.sw.Done()
 		// Status code defaults to 500
 		code := fiber.StatusInternalServerError
 		// Retrieve the custom status code if it's a *fiber.Error
@@ -98,10 +110,10 @@ func handleErrors(msg ...string) func(*fiber.Ctx, error) error {
 
 		// Render error page
 		log.Println("Rendering page")
-		name := fmt.Sprintf("errors/%d", code)
-		pageTitle := fmt.Sprintf("GFS Stack - %d error", code)
-		errRender := c.Render(name, fiber.Map{
-			"pageTitle": pageTitle,
+		errRender := c.Render("errors/index", fiber.Map{
+			"pageTitle":    fmt.Sprintf("GFS Stack - %d error", code),
+			"errorTitle":   fmt.Sprintf("%d Error", code),
+			"errorComment": errInfHandler.errorComment,
 		}, "layouts/main")
 
 		if errRender != nil {
