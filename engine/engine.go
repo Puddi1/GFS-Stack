@@ -53,14 +53,23 @@ func Init_engine() *fiber.App {
 
 // Listen makes the app listen to a port defined in the env variable, default is 3000
 func Listen(app *fiber.App) {
+	// Create tls certificate
+	// cert, err := tls.LoadX509KeyPair("./certs/ssl.cert", "./certs/ssl.key")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
 	addr := func() string {
 		if env.ENVs["PORT"] == "" {
 			return "3000"
 		}
 		return env.ENVs["PORT"]
 	}()
-	if err := app.Listen(":" + addr); err != nil {
-		log.Panic(err)
+	// if err := app.ListenTLSWithCertificate(addr, cert); err != nil {
+	// 	log.Fatal(err)
+	// }
+	if err := app.Listen(addr); err != nil {
+		log.Fatal(err)
 	}
 }
 
