@@ -7,8 +7,19 @@
         <div>Google</div>
     </button>
     <div>-</div>
-    <form class="flex flex-col gap-2">
+    <form action="/api/signup/email" method="post" class="flex flex-col gap-2">
         <div>
+            <!-- works -->
+            {{if .Email}}
+            <input
+                type="password"
+                placeholder="Password"
+                name="password"
+                id="password"
+                class="input input-bordered"
+                value="{{.Email}}"
+            />
+            {{else}}
             <input
                 type="email"
                 placeholder="Email"
@@ -16,6 +27,7 @@
                 id="email"
                 class="input input-bordered"
             />
+            {{end}}
         </div>
         <div>
             <input
@@ -26,16 +38,15 @@
                 class="input input-bordered"
             />
         </div>
-        <button
-            hx-post="/api/signup/email"
-            hx-indicator="#indicator"
-            hx-swap="none"
-            class="btn"
-        >
+        <button class="btn">
             <div>Sign up</div>
             <img id="indicator" class="htmx-indicator w-2" src="/goWhite.gif" />
         </button>
     </form>
+    <!-- works -->
+    {{if .test}}
+    <div>{{.test}}</div>
+    {{else}} {{end}}
     <div class="text-white">
         Do you already have an account?
         <span

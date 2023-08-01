@@ -63,10 +63,14 @@
             crossorigin="anonymous"
         ></script>
     </head>
-    <body class="bg-black">
-        <!-- {{if .AlertError}} {{template "alerts/alertError" .}} {{else}} {{end}}
-        {{if .AlertSuccess}} {{template "alerts/alertSuccess" .}} {{else}}
-        {{end}} -->
+    <!-- hx-target="body" will swap the entire dom -->
+    <body id="body" class="bg-black">
+        <!-- this the problem -->
+        {{if eq .NotifyAlert.AlertType "AlertSuccess" }} {{template
+        "alerts/alertSuccess" .}} {{else}} {{end}}
+        <!-- {{if eq .NotifyAlert.AlertType "AlertError" }} {{template "alerts/alertError"
+        .}} {{else}} {{end}} {{if eq .NotifyAlert.AlertType "AlertWarning" }}
+        {{template "alerts/alertWarning" .}} {{else}} {{end}} -->
         {{embed}}
     </body>
 </html>

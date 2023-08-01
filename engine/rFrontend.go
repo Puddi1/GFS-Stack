@@ -1,29 +1,11 @@
 package engine
 
 import (
+	"log"
+
 	"github.com/gofiber/fiber/v2"
+	"github.com/sujit-baniya/flash"
 )
-
-// SetRoutes is the function where you set all routes of the app
-func SetRoutes(app *fiber.App) error {
-	api := app.Group("/api")
-	db := api.Group("/database")
-	s := api.Group("/stripe")
-	s_we := s.Group("/webhook_events")
-
-	// // HTML Requests // //
-	htmlRequest(app)
-	// // API Requests // //
-	apiRequest(api)
-	// // DATABASE Requests // //
-	databaseRequest(db)
-	// // STRIPE Requests // //
-	stripeRequest(s)
-	// // STRIPE Webhooks - very WIP // //
-	stripeWebhooks(s_we)
-
-	return nil
-}
 
 // All GET request that have to return a Hypertext response
 func htmlRequest(r fiber.Router) {
@@ -52,11 +34,15 @@ func htmlRequest(r fiber.Router) {
 	// signup
 	r.Get("/signup", func(c *fiber.Ctx) error {
 		// Actions
+		log.Println("1")
+		m := flash.Get(c)
+		log.Println("2")
+		m["pageTitle"] = "GFS - Signup"
+		log.Println("3")
+		log.Println(m)
 		// ...
 		// Render
-		return c.Render("signup/index", fiber.Map{
-			"pageTitle": "GFS - Signup",
-		}, "layouts/main")
+		return c.Render("signup/index", m, "layouts/main")
 	})
 
 	// admin (ex forbidden request)
