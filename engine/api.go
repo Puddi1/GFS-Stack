@@ -20,6 +20,7 @@ func apiRequest(r fiber.Router) {
 		}
 		err := handlers.HandleSignUpUserWithEmail(b.Email, b.Password)
 		if err != nil {
+			// flash.WithError()
 			fmt.Printf("during user signup: %e", err)
 		}
 

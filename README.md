@@ -268,7 +268,7 @@ Needed:
 -   check chmod works for everyone or better solution
 -   stripe webhooks, idempotency and verify signature
 -   deployment flow test
--   Integrate [prometeus](https://prometheus.io/docs/introduction/first_steps/)
+-   Integrate [prometeus](https://prometheus.io/docs/introduction/first_steps/) or [traefik](https://github.com/traefik/traefik)
 -   Add popup error / success frontend
 -   Implement DIP and Middleware patterns to enhance code stability and dinamicity.
 

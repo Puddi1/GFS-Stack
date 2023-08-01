@@ -68,7 +68,7 @@ func Listen(app *fiber.App) {
 	// if err := app.ListenTLSWithCertificate(addr, cert); err != nil {
 	// 	log.Fatal(err)
 	// }
-	if err := app.Listen(addr); err != nil {
+	if err := app.Listen(":" + addr); err != nil {
 		log.Fatal(err)
 	}
 }
