@@ -4,8 +4,8 @@
     <div class="flex items-center justify-center flex-col gap-2">
         <h1>{{ .errorTitle }}</h1>
         <p>{{ .errorComment }}</p>
-        <a href="/">
-            <button class="btn bg-primary">Home</button>
+        <a hx-boost="true" href="/">
+            <button class="btn btn-primary">Home</button>
         </a>
         <img src="/goWhite.svg" alt="GO logo" />
     </div>

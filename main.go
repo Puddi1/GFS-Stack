@@ -25,6 +25,7 @@ func Init_GracefulShutdown(app *fiber.App) *sync.WaitGroup {
 		os.Interrupt,
 		syscall.SIGTERM,
 		syscall.SIGINT,
+		syscall.SIGSEGV,
 	)
 	// Creating sync group
 	var serverShutdown sync.WaitGroup
