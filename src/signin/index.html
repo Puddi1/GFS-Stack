@@ -7,8 +7,18 @@
         <div>Google</div>
     </button>
     <div>-</div>
-    <form class="flex flex-col gap-2">
+    <form action="/api/signup/email" method="post" class="flex flex-col gap-2">
         <div>
+            {{if .Email}}
+            <input
+                type="email"
+                placeholder="Email"
+                name="email"
+                id="email"
+                class="input input-bordered"
+                value="{{.Email}}"
+            />
+            {{else}}
             <input
                 type="email"
                 placeholder="Email"
@@ -16,6 +26,7 @@
                 id="email"
                 class="input input-bordered"
             />
+            {{end}}
         </div>
         <div>
             <input
@@ -26,15 +37,8 @@
                 class="input input-bordered"
             />
         </div>
-        <button
-            hx-boost="true"
-            hx-post="/api/signin/email"
-            hx-indicator="#indicator"
-            hx-swap="none"
-            class="btn"
-        >
+        <button class="btn">
             <div>Sign in</div>
-            <img id="indicator" class="htmx-indicator w-2" src="/goWhite.gif" />
         </button>
     </form>
     <div class="text-white">

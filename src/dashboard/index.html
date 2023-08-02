@@ -2,24 +2,38 @@
     class="w-screen h-screen bg-gradient-to-t from-purple-900 to-zinc-800 flex items-center justify-center gap-6 flex-col"
 >
     <div
-        class="stats bg-primary text-primary-content flex justify-center items-center gap-4 p-2"
+        class="stats bg-primary text-primary-content flex justify-center items-center gap-4 p-5"
     >
-        <div class="stat flex flex-col gap-0">
-            <div class="stat-title">Current counter</div>
-            <div
-                class="stat-value flex justify-center items-center"
-                id="counter-number"
-            >
-                0
-            </div>
-            <div class="stat-actions flex justify-evenly items-center">
-                <button class="btn btn-sm" onclick="add()">+</button>
-                <button class="btn btn-sm" onclick="subtract()">-</button>
+        <div>
+            <div class="flex items-center justify-center">{{.Email}}</div>
+
+            <div class="stat flex flex-row gap-5">
+                <div>
+                    <div class="stat-title">Current counter</div>
+
+                    <section
+                        name="counter-number"
+                        class="stat-value flex justify-center items-center"
+                        id="counter-number"
+                    >
+                        {{.Count}}
+                    </section>
+
+                    <div class="stat-actions flex justify-evenly items-center">
+                        <span class="btn btn-sm" onclick="add()">+</span>
+                        <span class="btn btn-sm" onclick="subtract()"> - </span>
+                    </div>
+                </div>
+
+                <div class="flex justify-center items-center">
+                    <button id="save-button" class="btn btn-primary">
+                        Save
+                    </button>
+                </div>
             </div>
         </div>
-        <!-- Note: htmx request's paths must follow your same backend response's paths (default: path from src to file) -->
-        <div hx-get="./login/user" class="btn btn-primary">Get</div>
     </div>
+
     <div>
         <a hx-boost="true" href="../">
             <p
@@ -29,7 +43,8 @@
             </p>
         </a>
     </div>
-    <img src="/login_public/goWhite.svg" alt="" />
+
+    <img src="/goWhite.svg" alt="" />
 </div>
 
 <!-- Custom js script tag -->
@@ -50,4 +65,18 @@
 
         counterNumber.innerHTML = currentCounter - 1;
     }
+
+    // Post request
+    let saveButton = document.getElementById("save-button");
+    saveButton.addEventListener("click", () => {
+        var url = window.location.origin + "/api/count/save";
+
+        fetch(url, {
+            method: "POST",
+            body: JSON.stringify({ Count: Number(counterNumber.innerHTML) }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+            },
+        });
+    });
 </script>

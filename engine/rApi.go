@@ -2,6 +2,7 @@ package engine
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/Puddi1/GFS-Stack/env"
@@ -45,7 +46,8 @@ func apiRequest(r fiber.Router) {
 
 		time.Sleep(5 * time.Second) // demonstrative of htmx rotating indicator
 		// Response redirect to dashboard
-		return nil
+		rf := handlers.NewRedirectFlash(c, fiber.Map{}, "/dashboard")
+		return handlers.HandleRedirectWithFlash(rf, handlers.WithNotifyAlert(handlers.AlertSuccess, "Signed up!", "User has been signed up correctly"))
 	})
 	r.Get("/signup/OAuth/:provider", func(c *fiber.Ctx) error {
 		// Actions
@@ -62,6 +64,7 @@ func apiRequest(r fiber.Router) {
 		if err := c.BodyParser(b); err != nil {
 			return err
 		}
+
 		res, err := handlers.HandleLoginUserWithEmail(b.Email, b.Password)
 		_ = res
 		if err != nil {
@@ -78,5 +81,26 @@ func apiRequest(r fiber.Router) {
 		location, status := handlers.HandleLoginWithThirdPartyOAuth(handlers.OAuth[c.Params("provider")], redirectUrl)
 		// Render
 		return c.Redirect(location, status)
+	})
+
+	// Save count of the dashboard
+	r.Post("/count/save", func(c *fiber.Ctx) error {
+		// Actions
+		b := new(handlers.Counter)
+		if err := c.BodyParser(b); err != nil {
+			return err
+		}
+
+		// Save new
+
+		log.Println(*b)
+		log.Println(b)
+		log.Println(b.Count)
+
+		// Render
+		rf := handlers.NewRedirectFlash(c, fiber.Map{
+			"Count": b.Count,
+		}, "/dashboard")
+		return handlers.HandleRedirectWithFlash(rf, handlers.WithNotifyAlert(handlers.AlertSuccess, "Saved", fmt.Sprintf("Your counter has been correctly set. Value: %v", b.Count)))
 	})
 }

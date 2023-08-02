@@ -7,7 +7,8 @@
         </h1>
         <h1 class="font-normal text-white">{{.stringFromBackend}}</h1>
 
-        <!-- if ... -->
+        <!-- Based on if user signed it -->
+
         <button hx-boost="true" class="btn btn-primary" id="button">
             Sign Up
         </button>
@@ -18,3 +19,8 @@
 
 <!-- Custom js file with custom path starting fron root -->
 <script type="module" src="/~script/index.js"></script>
+
+<!-- {{if eq .AlertType "AlertSuccess" }} {{template "alerts/alertSuccess"
+        .}} {{else if eq .AlertType "AlertError"}} {{template
+        "alerts/alertError" .}} {{else if eq .AlertType "AlertWarning"}}
+        {{template "alerts/alertWarning" .}} {{end}} -->

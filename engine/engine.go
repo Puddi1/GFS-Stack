@@ -131,10 +131,16 @@ func handleErrors() func(*fiber.Ctx, error) error {
 
 		// Custom error actions
 		switch code {
+		// // Custom Cases // //
 		case 403:
 			log.Println("Error 403 triggered, handling it...")
+
+		// // Standard Cases // //
 		case 404:
+			// 404 is retrived only in Fiber error handler,
+			// thus this is the only place that can be handled
 			log.Println("Error 404 triggered, handling it...")
+			handleError(fiber.ErrNotFound, "Page not found")
 		default:
 			log.Printf("Error %d triggered, not able to handle it", code)
 			return c.Status(fiber.StatusNotImplemented).SendString("Error not supported")

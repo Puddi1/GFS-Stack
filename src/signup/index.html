@@ -7,7 +7,12 @@
         <div>Google</div>
     </button>
     <div>-</div>
-    <form action="/api/signup/email" method="post" class="flex flex-col gap-2">
+    <form
+        hx-post="/api/signup/email"
+        hx-indicator="#indicator"
+        hx-target="#body"
+        class="flex flex-col gap-2"
+    >
         <div>
             {{if .Email}}
             <input
