@@ -65,12 +65,9 @@
     </head>
     <!-- hx-target="body" will swap the entire dom -->
     <body id="body" class="bg-black">
-        <!-- this the problem -->
-        {{if eq .NotifyAlert.AlertType "AlertSuccess" }} {{template
-        "alerts/alertSuccess" .}} {{else}} {{end}}
-        <!-- {{if eq .NotifyAlert.AlertType "AlertError" }} {{template "alerts/alertError"
-        .}} {{else}} {{end}} {{if eq .NotifyAlert.AlertType "AlertWarning" }}
-        {{template "alerts/alertWarning" .}} {{else}} {{end}} -->
-        {{embed}}
+        {{if eq .AlertType "AlertSuccess" }} {{template "alerts/alertSuccess"
+        .}} {{else if eq .AlertType "AlertError"}} {{template
+        "alerts/alertError" .}} {{else if eq .AlertType "AlertWarning"}}
+        {{template "alerts/alertWarning" .}} {{end}} {{embed}}
     </body>
 </html>

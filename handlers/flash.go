@@ -1,15 +1,13 @@
 package handlers
 
 import (
-	"log"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/sujit-baniya/flash"
 )
 
 const (
 	AlertSuccess = "AlertSuccess"
-	AlertError   = "AlerError"
+	AlertError   = "AlertError"
 	AlertWarning = "AlertWarning"
 )
 
@@ -29,22 +27,32 @@ func NewRedirectFlash(ctx *fiber.Ctx, data fiber.Map, url string) RedirectFlash 
 	}
 }
 
-// NotifyAlert is the struct type to pass in RedirectFlash.Data map if you wish
-// to trigger a notify.
-type NotifyAlert struct {
-	AlertType    string
-	AlertTitle   string
-	AlertMessage string
-}
-
+// LEARN HOW TO PASS COMPLEX STRUCTURES IN FIBER MAP TO BE ANDLED BY HTML TEMPLATES
+// // NotifyAlert is the struct type to pass in RedirectFlash.Data map if you wish
+// // to trigger a notify.
+// type NotifyAlert struct {
+// 	AlertType AlertType `json:"AlertType"`
+// }
+// // AlertType    AlertType    `json:"AlertType"`
+// // AlertTitle   AlertTitle   `json:"AlertTitle"`
+// // AlertMessage AlertMessage `json:"AlertMessage"`
+// type AlertType struct {
+// 	Type string `json:"Type"`
+// }
+// type AlertTitle struct {
+// 	Title string
+// }
+// type AlertMessage struct {
+// 	Message string
+// }
 // Creates and return a new RedirectFlash struct
-func NewNotifyAlert(aType string, aTitle string, aMessage string) NotifyAlert {
-	return NotifyAlert{
-		AlertType:    aType,
-		AlertTitle:   aTitle,
-		AlertMessage: aMessage,
-	}
-}
+// func NewNotifyAlert(aType AlertType, aTitle AlertTitle, aMessage AlertMessage) NotifyAlert {
+// 	return NotifyAlert{
+// 		AlertType:    aType,
+// 		AlertTitle:   aTitle,
+// 		AlertMessage: aMessage,
+// 	}
+// }
 
 // AddRedirectData is a global optional type to write on fiber.Map
 type AddRedirectData func(*fiber.Map)
@@ -55,15 +63,14 @@ func HandleRedirectWithFlash(rf RedirectFlash, ard ...AddRedirectData) error {
 	for _, fn := range ard {
 		fn(&rf.Data)
 	}
-
-	log.Println("Redirect flash internal: ", rf)
-
 	return flash.WithData(rf.Ctx, rf.Data).Redirect(rf.URL)
 }
 
 // WithNotifyAlert adds a notify alert data to the data within a RedirectWithFlash.
-func WithNotifyAlert(na NotifyAlert) AddRedirectData {
+func WithNotifyAlert(AlertType string, AlertTitle string, AlertMessage string) AddRedirectData {
 	return func(d *fiber.Map) {
-		(*d)["NotifyAlert"] = na
+		(*d)["AlertType"] = AlertType
+		(*d)["AlertTitle"] = AlertTitle
+		(*d)["AlertMessage"] = AlertMessage
 	}
 }

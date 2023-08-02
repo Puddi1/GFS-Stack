@@ -1,8 +1,6 @@
 package engine
 
 import (
-	"log"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/sujit-baniya/flash"
 )
@@ -34,15 +32,12 @@ func htmlRequest(r fiber.Router) {
 	// signup
 	r.Get("/signup", func(c *fiber.Ctx) error {
 		// Actions
-		log.Println("1")
-		m := flash.Get(c)
-		log.Println("2")
-		m["pageTitle"] = "GFS - Signup"
-		log.Println("3")
-		log.Println(m)
+		// Get values if there is any flash redirection
+		data := flash.Get(c)
+		data["pageTitle"] = "GFS - Signup"
 		// ...
 		// Render
-		return c.Render("signup/index", m, "layouts/main")
+		return c.Render("signup/index", data, "layouts/main")
 	})
 
 	// admin (ex forbidden request)

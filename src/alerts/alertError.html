@@ -1,21 +1,25 @@
-<div class="w-full h-full flex fixed items-start justify-end p-10">
-    <div
-        class="alert alert-error flex items-center justify-start flex-wrap shadow-2xl md:w-3/6 absolute transition-all animate-enter-alert left-full"
-    >
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="stroke-current shrink-0 h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
+<div
+    class="w-full h-full flex fixed items-center justify-center pointer-events-none"
+>
+    <div class="relative w-full h-full flex items-start justify-end p-10">
+        <div
+            class="alert alert-error flex items-center justify-start flex-wrap shadow-2xl w-full md:w-3/6 absolute transition-all animate-enter-alert pointer-events-auto left-full"
         >
-            <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-        </svg>
-        <h1 class="font-bold">{{.NotifyAlert.AlertTitle}}</h1>
-        <span>{{.NotifyAlert.AlertMessage}}</span>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="stroke-current shrink-0 h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+            </svg>
+            <h1 class="font-bold">{{.AlertTitle}}</h1>
+            <span>{{.AlertMessage}}</span>
+        </div>
     </div>
 </div>

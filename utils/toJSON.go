@@ -35,3 +35,7 @@ func MapToJSON(s any) []byte {
 
 	return raw
 }
+
+func ByteToString(b []byte) string {
+	return string(b)
+}

@@ -118,6 +118,9 @@ var errInfHandler *ErrorHandler
 // Performance because of waitgroup? Shouldn't be affected much
 func handleErrors() func(*fiber.Ctx, error) error {
 	return func(c *fiber.Ctx, err error) error {
+		// Development is top tier to handle errors
+		log.Println(err)
+
 		// Status code defaults to 500
 		code := fiber.StatusInternalServerError
 		// Retrieve the custom status code if it's a *fiber.Error
