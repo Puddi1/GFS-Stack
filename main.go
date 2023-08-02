@@ -15,6 +15,7 @@ import (
 	"github.com/Puddi1/GFS-Stack/utils"
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/exp/slog"
+	"gorm.io/gorm"
 )
 
 func Init_GracefulShutdown(app *fiber.App) *sync.WaitGroup {
@@ -61,7 +62,7 @@ func main() {
 	lg := slog.Default()
 	lg.Info("Log initialized, log instance: ", lg)
 	// Init db
-	database.Init_db()
+	database.Init_db(&gorm.Config{})
 	// Init stripe
 	stripe_gfs.Init_stripe()
 	// Init fiber

@@ -4,26 +4,29 @@ package handlers
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/Puddi1/GFS-Stack/env"
 	"github.com/Puddi1/GFS-Stack/utils"
 )
 
-// Struct that represent the JSON format of the body of the update user api request
+//**********************//
+//*****    AUTH    *****//
+//**********************//
+
+// UpdateUserBody represent the JSON format of the body of the update user api request
 type UpdateUserBody struct {
 	Email    string         `json:"email"`
 	Password string         `json:"password"`
 	Data     UpdateUserData `json:"data"`
 }
 
-// Nested data type, simplle key to value type
+// UpdateUserData is a nested UpdateUserBody data type, simple key to value type
 type UpdateUserData struct {
 	KeyValue map[string]string
 }
 
-// OAuth providers
+// OAuth providers map, be sure to handle correctly the key in the frontend
 var OAuth = map[string]string{
 	"Apple":     "apple",
 	"Azure":     "azure",
@@ -44,8 +47,32 @@ var OAuth = map[string]string{
 	"Workos":    "workos",
 }
 
+// GetUser allows you to get the current user infos via supabase Auth
+func GetUser(userAccessToken string) (*http.Response, error) {
+	apiKey := env.ENVs["SUPABASE_API_PRIVATE_KEY"]
+	url := env.ENVs["SUPABASE_URL"] + "/auth/v1/user"
+	body := []byte{}
+	headers := [][2]string{
+		{"Content-Type", "application/json"},
+		{"apikey", apiKey},
+		{"Authorization", "Bearer" + userAccessToken},
+	}
+
+	res, err := HandleRequestHTTP(&RequestHTTP{
+		MethodHTTP: http.MethodGet,
+		Url:        url,
+		Body:       body,
+		Headers:    headers,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
 // HandleSignUpUserWithEmail allows you to sign up users with email and password via supabase Auth
-func HandleSignUpUserWithEmail(email string, password string) error {
+func HandleSignUpUserWithEmail(email string, password string) (*http.Response, error) {
 	apiKey := env.ENVs["SUPABASE_API_PRIVATE_KEY"]
 	url := env.ENVs["SUPABASE_URL"] + "/auth/v1/signup"
 	body := map[string]string{"email": email, "password": password}
@@ -58,14 +85,10 @@ func HandleSignUpUserWithEmail(email string, password string) error {
 		Headers:    headers,
 	})
 	if err != nil {
-		log.Fatalf("Error during User signup request: %s", err)
+		return nil, err
 	}
 
-	resBody := HandleResponseBodyToString(res)
-
-	fmt.Printf("\nUser signed up, response: %s", resBody)
-
-	return nil
+	return res, nil
 }
 
 // HandleLoginUserWithEmail allows you to login users with email and password via supabase Auth
@@ -82,19 +105,15 @@ func HandleLoginUserWithEmail(email string, password string) (*http.Response, er
 		Headers:    headers,
 	})
 	if err != nil {
-		log.Fatalf("Error during User login request: %s", err)
+		return nil, err
 	}
-
-	resBody := HandleResponseBodyToString(res)
-
-	fmt.Printf("\nUser logged in, response: %s", resBody)
-	fmt.Println(res)
 
 	return res, nil
 }
 
 // HandleLoginUserWithPhone allows you to login users with phone and password via supabase Auth
-func HandleLoginUserWithPhone(phone string, password string) error {
+// Note: You must enter your own twilio credentials on the auth settings page to enable SMS-based Logins.
+func HandleLoginUserWithPhone(phone string, password string) (*http.Response, error) {
 	apiKey := env.ENVs["SUPABASE_API_PRIVATE_KEY"]
 	url := env.ENVs["SUPABASE_URL"] + "/auth/v1/signup"
 	body := map[string]string{"phone": phone, "password": password}
@@ -107,18 +126,14 @@ func HandleLoginUserWithPhone(phone string, password string) error {
 		Headers:    headers,
 	})
 	if err != nil {
-		log.Fatalf("Error during User login with phone request: %s", err)
+		return nil, err
 	}
 
-	resBody := HandleResponseBodyToString(res)
-
-	fmt.Printf("\nUser logged in with phone, response: %s", resBody)
-
-	return nil
+	return res, nil
 }
 
 // HandleSendRecoveryEmail allows you to send users a recovery email via supabase Auth
-func HandleSendRecoveryEmail(email string) error {
+func HandleSendRecoveryEmail(email string) (*http.Response, error) {
 	apiKey := env.ENVs["SUPABASE_API_PRIVATE_KEY"]
 	url := env.ENVs["SUPABASE_URL"] + "/auth/v1/recover"
 	body := map[string]string{"email": email}
@@ -131,26 +146,20 @@ func HandleSendRecoveryEmail(email string) error {
 		Headers:    headers,
 	})
 	if err != nil {
-		log.Fatalf("Error during Recovery email request: %s", err)
+		return nil, err
 	}
 
-	resBody := HandleResponseBodyToString(res)
-
-	fmt.Printf("\nRecovery email sent, response: %s", resBody)
-
-	return nil
+	return res, nil
 }
 
 // HandleUpdateUser allows you to update users' email and password via supabase Auth
-func HandleUpdateUser(u *UpdateUserBody) error {
-	var UserAccessToken string
-
+func HandleUpdateUser(u *UpdateUserBody, userAccessToken string) (*http.Response, error) {
 	apiKey := env.ENVs["SUPABASE_API_PRIVATE_KEY"]
 	url := env.ENVs["SUPABASE_URL"] + "/auth/v1/user"
 	body := utils.StructToJSON(u)
 	headers := [][2]string{
 		{"apikey", apiKey},
-		{"Authorization", "Bearer " + UserAccessToken},
+		{"Authorization", "Bearer " + userAccessToken},
 		{"Content-Type", "application/json"},
 	}
 
@@ -161,27 +170,21 @@ func HandleUpdateUser(u *UpdateUserBody) error {
 		Headers:    headers,
 	})
 	if err != nil {
-		log.Fatalf("Error during User login: %s", err)
+		return nil, err
 	}
 
-	resBody := HandleResponseBodyToString(res)
-
-	fmt.Printf("\nUser logged in, response: %s", resBody)
-
-	return nil
+	return res, nil
 }
 
 // HandleLogOutUser allows you to logout users via supabase Auth
-func HandleLogOutUser(email string, password string) error {
-	var UserToken string
-
+func HandleLogOutUser(email string, password string, userAccessToken string) (*http.Response, error) {
 	apiKey := env.ENVs["SUPABASE_API_PRIVATE_KEY"]
 	url := env.ENVs["SUPABASE_URL"] + "/auth/v1/logout"
 	body := []byte{}
 	headers := [][2]string{
 		{"Content-Type", "application/json"},
 		{"apikey", apiKey},
-		{"Authorization", "Bearer " + UserToken},
+		{"Authorization", "Bearer " + userAccessToken},
 	}
 
 	res, err := HandleRequestHTTP(&RequestHTTP{
@@ -191,20 +194,14 @@ func HandleLogOutUser(email string, password string) error {
 		Headers:    headers,
 	})
 	if err != nil {
-		log.Fatalf("Error during User login: %s", err)
+		return nil, err
 	}
 
-	resBody := HandleResponseBodyToString(res)
-
-	fmt.Printf("\nUser logged in, response: %s", resBody)
-
-	return nil
+	return res, nil
 }
 
 // HandleSendUserInvite allows you to send users invites via email via supabase Auth
-func HandleSendUserInvite(email string) error {
-	var SUPABASE_KEY string
-
+func HandleSendUserInvite(email string, SUPABASE_KEY string) (*http.Response, error) {
 	apiKey := env.ENVs["SUPABASE_API_PRIVATE_KEY"]
 	url := env.ENVs["SUPABASE_URL"] + "/auth/v1/invite"
 	body := map[string]string{"email": email}
@@ -221,18 +218,14 @@ func HandleSendUserInvite(email string) error {
 		Headers:    headers,
 	})
 	if err != nil {
-		log.Fatalf("Error during User login: %s", err)
+		return nil, err
 	}
 
-	resBody := HandleResponseBodyToString(res)
-
-	fmt.Printf("\nUser logged in, response: %s", resBody)
-
-	return nil
+	return res, nil
 }
 
 // HandleLoginWithMagicLinkViaEmail allows you to login users with magic link sent via email via supabase Auth
-func HandleLoginWithMagicLinkViaEmail(email string) error {
+func HandleLoginWithMagicLinkViaEmail(email string) (*http.Response, error) {
 	apiKey := env.ENVs["SUPABASE_API_PRIVATE_KEY"]
 	url := env.ENVs["SUPABASE_URL"] + "/auth/v1/magiclink"
 	body := map[string]string{"email": email}
@@ -248,19 +241,15 @@ func HandleLoginWithMagicLinkViaEmail(email string) error {
 		Headers:    headers,
 	})
 	if err != nil {
-		log.Fatalf("Error during User login with magic link via email: %s", err)
+		return nil, err
 	}
 
-	resBody := HandleResponseBodyToString(res)
-
-	fmt.Printf("\nUser logged in with magic link via email, response: %s", resBody)
-
-	return nil
+	return res, nil
 }
 
 // HandleLoginViaSMSOTP allows you to login users with SMS OTP via supabase Auth
 // Note: VerifyViaSMSOTP needed, twilio credentials needed
-func HandleLoginViaSMSOTP(phone string) error {
+func HandleLoginViaSMSOTP(phone string) (*http.Response, error) {
 	apiKey := env.ENVs["SUPABASE_API_PRIVATE_KEY"]
 	url := env.ENVs["SUPABASE_URL"] + "/auth/v1/otp"
 	body := map[string]string{"phone": phone}
@@ -276,19 +265,15 @@ func HandleLoginViaSMSOTP(phone string) error {
 		Headers:    headers,
 	})
 	if err != nil {
-		log.Fatalf("Error during User login with magic link via email: %s", err)
+		return nil, err
 	}
 
-	resBody := HandleResponseBodyToString(res)
-
-	fmt.Printf("\nUser logged in with magic link via email, response: %s", resBody)
-
-	return nil
+	return res, nil
 }
 
 // HandleVerifyViaSMSOTP allows you to very users' SMS OTP via supabase Auth
-// Note: LoginViaSMSOTP needed, twilio credentials needed
-func HandleVerifyViaSMSOTP(phone string, token string) error {
+// Note: You must enter your own twilio credentials on the auth settings page to enable SMS-based Logins.
+func HandleVerifyViaSMSOTP(phone string, token string) (*http.Response, error) {
 	apiKey := env.ENVs["SUPABASE_API_PRIVATE_KEY"]
 	url := env.ENVs["SUPABASE_URL"] + "/auth/v1/verify"
 	body := map[string]string{
@@ -308,14 +293,10 @@ func HandleVerifyViaSMSOTP(phone string, token string) error {
 		Headers:    headers,
 	})
 	if err != nil {
-		log.Fatalf("Error during User Verification via SMS OTP: %s", err)
+		return nil, err
 	}
 
-	resBody := HandleResponseBodyToString(res)
-
-	fmt.Printf("\nUser logged in with SMS OTP, response: %s", resBody)
-
-	return nil
+	return res, nil
 }
 
 // HandleLoginWithThirdPartyOAuth allows you to login users with a third party OAuth via supabase Auth
@@ -333,32 +314,37 @@ func HandleLoginWithThirdPartyOAuth(provider string, redirectUrl string) (locati
 	return url, http.StatusSeeOther
 }
 
-// HandleGetCurrentUser allows you to get the current user infos via supabase Auth
-func HandleGetCurrentUser() (*http.Response, error) {
-	var userToken string
+//**********************//
+//*****  WEBHOOKS  *****//
+//**********************//
 
+// func i() {}
+
+//**********************//
+//*****  FUNCTIONS *****//
+//**********************//
+
+//**********************//
+//*****   BUCKET   *****//
+//**********************//
+// Don't care much about impl. leaving at last, maybe.
+
+// HandleSetFileCache sets the cache for a file, using "path/to/file.jpg" and version
+func HandleSetFileCache(pathToFile string, version int) (*http.Response, error) {
 	apiKey := env.ENVs["SUPABASE_API_PRIVATE_KEY"]
-	url := env.ENVs["SUPABASE_URL"] + "/auth/v1/user"
-	body := []byte{}
-	headers := [][2]string{
-		{"Content-Type", "application/json"},
-		{"apikey", apiKey},
-		{"Authorization", "Bearer" + userToken},
-	}
+	url := env.ENVs["SUPABASE_URL"] + "/storage/v1/object/"
+	body := map[string]string{}
+	headers := [][2]string{}
 
 	res, err := HandleRequestHTTP(&RequestHTTP{
-		MethodHTTP: http.MethodGet,
-		Url:        url,
-		Body:       body,
+		MethodHTTP: http.MethodPost,
+		Url:        fmt.Sprintf("%s%s?token=%s&version=%v", url, pathToFile, apiKey, version),
+		Body:       utils.MapToJSON(body),
 		Headers:    headers,
 	})
 	if err != nil {
-		log.Fatalf("Error during User fetch: %s", err)
+		return nil, err
 	}
 
 	return res, nil
 }
-
-// Login with third party auth
-// Check error handling and return statements of functions here
-// check standalone variables to complete and where to find them

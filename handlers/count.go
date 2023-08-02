@@ -1,9 +1,11 @@
 package handlers
 
-type Counter struct {
-	Count int `json:"Count"`
-}
+import (
+	"github.com/Puddi1/GFS-Stack/data"
+)
 
-func HandleSaveCount() {
+// HandleSaveCount takes the count and overrites the old user count in the databse
+func HandleSaveCount(c data.Counter) (data.Counter, error) {
 
+	return c, nil
 }

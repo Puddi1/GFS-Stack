@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"net/http"
 )
@@ -37,14 +36,14 @@ func HandleRequestHTTP(r *RequestHTTP) (*http.Response, error) {
 
 // HandleResponseBodyToString takes a http.Response reference and returns the body as string
 // without incurring memory leaks.
-func HandleResponseBodyToString(r *http.Response) string {
+func HandleResponseBodyToString(r *http.Response) (string, error) {
 	// read response body
-	stringBody, error := io.ReadAll(r.Body)
-	if error != nil {
-		fmt.Println(error)
+	stringBody, err := io.ReadAll(r.Body)
+	if err != nil {
+		return "", err
 	}
 	// close response body
 	r.Body.Close()
 	// print response body
-	return string(stringBody)
+	return string(stringBody), nil
 }

@@ -12,7 +12,7 @@ import (
 
 var DB *gorm.DB
 
-func Init_db() {
+func Init_db(config *gorm.Config) {
 	SUPABASE_DB_SSLMODE := env.ENVs["SUPABASE_DB_SSLMODE"]
 	dsn := fmt.Sprintf(
 		"user=%s password=%s host=%s port=%s dbname=%s sslmode=%s",
@@ -26,17 +26,22 @@ func Init_db() {
 
 	if SUPABASE_DB_SSLMODE == "verify-full" {
 		cert, errRead := os.ReadFile(env.ENVs["SUPABASE_DB_SSLCERT_PATH"])
-    	if errRead != nil {
-        	log.Fatalf("Error reading cerificate: %s", errRead)
+		if errRead != nil {
+			log.Fatalf("Error reading cerificate: %s", errRead)
 		}
 		dsn = dsn + fmt.Sprintf(" sslcert=%s", cert)
 	}
 
 	var err error
-	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
-		
-	})
-    if err != nil {
-        log.Fatal("Error connecting to database")
+	DB, err = gorm.Open(postgres.Open(dsn), config)
+	if err != nil {
+		log.Fatal("Error connecting to database")
+	}
+}
+
+// MigrateData creates a table of the data in the DB
+func MigrateData(d ...any) {
+	for _, d := range d {
+		DB.AutoMigrate(d)
 	}
 }

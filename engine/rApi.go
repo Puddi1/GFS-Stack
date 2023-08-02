@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/Puddi1/GFS-Stack/data"
 	"github.com/Puddi1/GFS-Stack/env"
 	"github.com/Puddi1/GFS-Stack/handlers"
 	"github.com/Puddi1/GFS-Stack/utils"
@@ -39,7 +40,7 @@ func apiRequest(r fiber.Router) {
 		}
 
 		// Handle request
-		err := handlers.HandleSignUpUserWithEmail(b.Email, b.Password)
+		_, err := handlers.HandleSignUpUserWithEmail(b.Email, b.Password)
 		if err != nil {
 			fmt.Printf("Error during user signup: %e", err)
 		}
@@ -86,7 +87,7 @@ func apiRequest(r fiber.Router) {
 	// Save count of the dashboard
 	r.Post("/count/save", func(c *fiber.Ctx) error {
 		// Actions
-		b := new(handlers.Counter)
+		b := new(data.Counter)
 		if err := c.BodyParser(b); err != nil {
 			return err
 		}

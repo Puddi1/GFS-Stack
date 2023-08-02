@@ -262,14 +262,11 @@ Needed:
 -   supebase ssl
 -   backend integration stuff
 -   superbase postgress utilities
--   check Fiber middelwares
--   Login with third party auth
 -   user session token management utils
 -   check chmod works for everyone or better solution
 -   stripe webhooks, idempotency and verify signature
 -   deployment flow test
 -   Integrate [prometeus](https://prometheus.io/docs/introduction/first_steps/) or [traefik](https://github.com/traefik/traefik)
--   Add popup error / success frontend
 -   Implement DIP and Middleware patterns to enhance code stability and dinamicity.
 
 Optionals:
