@@ -1,6 +1,9 @@
 package engine
 
 import (
+	"log"
+
+	"github.com/Puddi1/GFS-Stack/handlers"
 	"github.com/gofiber/fiber/v2"
 	"github.com/sujit-baniya/flash"
 )
@@ -21,7 +24,7 @@ func htmlRequest(r fiber.Router) {
 	})
 
 	// signin
-	r.Get("/signin", func(c *fiber.Ctx) error {
+	r.Get("/signin", redirectUser(func(c *fiber.Ctx) error {
 		// Get values if there is any flash redirection
 		vData := flash.Get(c)
 		// Actions
@@ -31,10 +34,10 @@ func htmlRequest(r fiber.Router) {
 		// Render
 		vData["pageTitle"] = "GFS - Signin"
 		return c.Render("signin/index", vData, "layouts/main")
-	})
+	}))
 
 	// signup
-	r.Get("/signup", func(c *fiber.Ctx) error {
+	r.Get("/signup", redirectUser(func(c *fiber.Ctx) error {
 		// Get values if there is any flash redirection
 		vData := flash.Get(c)
 		// Actions
@@ -44,10 +47,13 @@ func htmlRequest(r fiber.Router) {
 		// Render
 		vData["pageTitle"] = "GFS - Signup"
 		return c.Render("signup/index", vData, "layouts/main")
-	})
+	}))
 
 	// dashboard
-	r.Get("/dashboard", onlyUser(func(c *fiber.Ctx) error {
+	r.Get("/dashboard", onlyUserFill(func(c *fiber.Ctx, u handlers.User) error {
+		log.Println("Req started")
+		log.Println(u)
+
 		// Get values if there is any flash redirection
 		vData := flash.Get(c)
 		// Actions

@@ -2,7 +2,11 @@
     class="w-screen h-screen bg-gradient-to-t from-purple-900 to-zinc-800 flex items-center justify-center gap-6 flex-col"
 >
     <div class="text-3xl text-white">Sign up!</div>
-    <button hx-get="/api/signup/OAuth/google" class="btn">
+    <button
+        name="Google OAuth Signup Request"
+        hx-get="/api/signup/OAuth/Google"
+        class="btn"
+    >
         <img class="w-6 h-6" src="/login/google.svg" alt="" />
         <div>Google</div>
     </button>

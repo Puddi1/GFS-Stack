@@ -8,7 +8,6 @@ import (
 
 	"github.com/Puddi1/GFS-Stack/env"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/template/html/v2"
 )
 
@@ -29,15 +28,15 @@ func Init_engine() *fiber.App {
 		})
 
 		// CORS - development
-		app.Use(cors.New(cors.Config{
-			AllowHeaders:     "Origin,Content-Type,Accept,Content-Length,Accept-Language,Accept-Encoding,Connection,Access-Control-Allow-Origin",
-			AllowOrigins:     "*",
-			AllowCredentials: true,
-			AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
-			AllowOriginsFunc: func(origin string) bool {
-				return true
-			},
-		}))
+		// app.Use(cors.New(cors.Config{
+		// 	AllowHeaders:     "Origin,Content-Type,Accept,Content-Length,Accept-Language,Accept-Encoding,Connection,Access-Control-Allow-Origin",
+		// 	AllowOrigins:     "*",
+		// 	AllowCredentials: true,
+		// 	AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
+		// 	AllowOriginsFunc: func(origin string) bool {
+		// 		return true
+		// 	},
+		// }))
 
 		// Loading static files (css and js) on requests
 		app.Static("/~style/", "./src")
@@ -56,10 +55,10 @@ func Init_engine() *fiber.App {
 	})
 
 	// CORS, in prod is good practice to hard code them
-	app.Use(cors.New(cors.Config{
-		AllowOrigins: "" + env.ENVs["APP_URL"],
-		AllowHeaders: "Origin, Content-Type, Accept",
-	}))
+	// app.Use(cors.New(cors.Config{
+	// 	AllowOrigins: "" + env.ENVs["APP_URL"],
+	// 	AllowHeaders: "Origin, Content-Type, Accept",
+	// }))
 
 	// Loading static files (css and js) on requests
 	app.Static("/assets", "./dist/assets")

@@ -4,15 +4,22 @@ package handlers
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"strings"
 
 	"github.com/Puddi1/GFS-Stack/env"
 	"github.com/Puddi1/GFS-Stack/utils"
 )
 
-//**********************//
-//*****    AUTH    *****//
-//**********************//
+// **********************//
+// *****    AUTH    *****//
+// **********************//
+//
+// User represent the user struct
+type User struct {
+	JWT *JWT
+}
 
 // UpdateUserBody represent the JSON format of the body of the update user api request
 type UpdateUserBody struct {
@@ -311,24 +318,49 @@ func HandleLoginWithThirdPartyOAuth(provider string, redirectUrl string) (locati
 		"/auth/v1/authorize?provider=" + provider +
 		"&redirect_to=https://" + redirectUrl
 	// Send destination
+	log.Println(url)
 	return url, http.StatusSeeOther
 }
 
 //**********************//
 //*****  WEBHOOKS  *****//
 //**********************//
+// Webhooks are handled entirely on the Supabase dashboard
 
-// func i() {}
+// **********************//
+// *****  FUNCTIONS *****//
+// **********************//
+// InvokeEdgeFunction invokes an edge function with a http request.
+func HandleInvokeEdgeFunction(functionName string) (*http.Response, error) {
+	apiKey := env.ENVs["SUPABASE_API_PRIVATE_KEY"]
+	url := env.ENVs["SUPABASE_URL"] + "/" + functionName
+	url = strings.Replace(url, "supabase", "functions.supabase", -1)
+	url = url + "/" + functionName
+	body := map[string]string{
+		"name": "Functions",
+	}
+	headers := [][2]string{
+		{"Content-Type", "application/json"},
+		{"Authorization", "Bearer " + apiKey},
+	}
 
-//**********************//
-//*****  FUNCTIONS *****//
-//**********************//
+	res, err := HandleRequestHTTP(&RequestHTTP{
+		MethodHTTP: http.MethodPost,
+		Url:        url,
+		Body:       utils.MapToJSON(body),
+		Headers:    headers,
+	})
+	if err != nil {
+		return nil, err
+	}
 
-//**********************//
-//*****   BUCKET   *****//
-//**********************//
+	return res, nil
+}
+
+// **********************//
+// *****   BUCKET   *****//
+// **********************//
 // Don't care much about impl. leaving at last, maybe.
-
 // HandleSetFileCache sets the cache for a file, using "path/to/file.jpg" and version
 func HandleSetFileCache(pathToFile string, version int) (*http.Response, error) {
 	apiKey := env.ENVs["SUPABASE_API_PRIVATE_KEY"]

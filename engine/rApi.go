@@ -53,8 +53,10 @@ func apiRequest(r fiber.Router) {
 	r.Get("/signup/OAuth/:provider", func(c *fiber.Ctx) error {
 		// Actions
 		redirectUrl := "" + env.ENVs["APP_URL"] + "/dashboard"
+		log.Println(redirectUrl)
 		location, status := handlers.HandleLoginWithThirdPartyOAuth(handlers.OAuth[c.Params("provider")], redirectUrl)
 		// Render
+		log.Println(location, status)
 		return c.Redirect(location, status)
 	})
 
